@@ -12,7 +12,9 @@
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -32,7 +34,16 @@
     "oxlint": "^1.51.0",
     "typescript": "~5.9.3",
     "vite": "^8.0.0-beta.13",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "storybook": "^10.2.14",
+    "@storybook/react-vite": "^10.2.14",
+    "@chromatic-com/storybook": "^5.0.1",
+    "@storybook/addon-vitest": "^10.2.14",
+    "@storybook/addon-a11y": "^10.2.14",
+    "@storybook/addon-docs": "^10.2.14",
+    "@storybook/addon-onboarding": "^10.2.14",
+    "playwright": "^1.58.2",
+    "@vitest/browser-playwright": "^4.0.18"
   },
   "overrides": {
     "vite": "^8.0.0-beta.13"
