@@ -1,0 +1,29 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
+  "rules": {
+    // Disable rules that overlap with TypeScript type checking
+    "no-undef": "off",
+    "no-unused-vars": "off",
+    // React specific
+    "react/jsx-no-target-blank": "error",
+    "react/no-direct-mutation-state": "error",
+    "react/react-in-jsx-scope": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "19"
+    }
+  },
+  "env": {
+    "builtin": true,
+    "browser": true,
+    "es2022": true
+  },
+  "ignorePatterns": ["dist", "node_modules", "*.min.js"]
+}
