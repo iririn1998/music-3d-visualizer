@@ -95,10 +95,12 @@ export function useLocalAudio() {
 
   /** アンマウント時にリソースを解放する */
   useEffect(() => {
+    const loadToken = loadTokenRef;
+    const analyzer = analyzerRef;
     return () => {
-      ++loadTokenRef.current; // invalidate any in-flight loadFile
+      ++loadToken.current; // invalidate any in-flight loadFile
       stopLoop();
-      void analyzerRef.current?.dispose().catch((error) => {
+      void analyzer.current?.dispose().catch((error) => {
         console.error('Failed to dispose AudioAnalyzer in useLocalAudio cleanup:', error);
       });
     };
