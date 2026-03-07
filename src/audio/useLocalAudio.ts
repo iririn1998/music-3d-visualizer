@@ -22,6 +22,9 @@ export function useLocalAudio() {
   smoothedRef.current = smoothedAudioData;
 
   const startLoop = useCallback(() => {
+    // Reset the timestamp so the first delta after a restart is near zero
+    // rather than spanning the entire gap since the loop was last running.
+    prevTimeRef.current = performance.now();
     const loop = (now: number) => {
       const delta = Math.min((now - prevTimeRef.current) / 1000, 0.1);
       prevTimeRef.current = now;
