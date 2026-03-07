@@ -20,6 +20,9 @@ export class AudioAnalyzer {
   private _currentData: AudioData = { ...DEFAULT_AUDIO_DATA };
   private _onEnded: (() => void) | null = null;
 
+  /** 進行中の loadFile() 呼び出しを一意に識別するID。新しい呼び出しが来たら更新される */
+  private _loadId = 0;
+
   get currentData(): AudioData {
     return this._currentData;
   }
@@ -51,6 +54,11 @@ export class AudioAnalyzer {
    * @param sensitivity 感度係数（0.1〜2.0 程度）
    */
   async loadFile(file: File, sensitivity = 1.0): Promise<void> {
+    // インクリメントして「自分の世代」を確定させる。
+    // await の合間に次の loadFile() が呼ばれると _loadId が変わるため、
+    // 古い呼び出しは自身のIDと一致しなくなり中断できる。
+    const myId = ++this._loadId;
+
     this.stop();
 
     const ctx = this.ensureContext();
@@ -59,7 +67,10 @@ export class AudioAnalyzer {
     }
 
     const arrayBuffer = await file.arrayBuffer();
+    if (myId !== this._loadId) return;
+
     const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+    if (myId !== this._loadId) return;
 
     const analyser = this.setupAnalyser(ctx);
 
