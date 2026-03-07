@@ -14,6 +14,7 @@ export function useLocalAudio() {
   const analyzerRef = useRef<AudioAnalyzer | null>(null);
   const rafRef = useRef<number | null>(null);
   const prevTimeRef = useRef<number>(performance.now());
+  const loadTokenRef = useRef<number>(0);
 
   const { sensitivity, setAudioData, setSmoothedAudioData, setPlaybackState, smoothedAudioData } =
     useAudioStore();
@@ -53,6 +54,8 @@ export function useLocalAudio() {
   /** ローカルファイルを読み込んで再生を開始する */
   const loadFile = useCallback(
     async (file: File) => {
+      const token = ++loadTokenRef.current;
+
       if (!analyzerRef.current) {
         analyzerRef.current = new AudioAnalyzer();
         analyzerRef.current.setOnEnded(() => {
@@ -62,6 +65,10 @@ export function useLocalAudio() {
       }
       stopLoop();
       await analyzerRef.current.loadFile(file, sensitivity);
+
+      // 待機中に新しい loadFile が呼ばれていたら古い結果を破棄する
+      if (token !== loadTokenRef.current) return;
+
       setPlaybackState('playing');
       startLoop();
     },
