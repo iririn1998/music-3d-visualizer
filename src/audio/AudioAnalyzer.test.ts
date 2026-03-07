@@ -261,7 +261,7 @@ describe('AudioAnalyzer', () => {
       expect(inst._currentData).toEqual({ bass: 0, mid: 0, treble: 0, energy: 0, rms: 0 });
     });
 
-    it('update() returns DEFAULT_AUDIO_DATA when called after stop() (analyser is null)', () => {
+    it('update() returns existing _currentData when analyser is null', () => {
       const inst = priv(analyzer);
       inst.analyser = null;
       inst._currentData = { bass: 0.5, mid: 0.5, treble: 0.5, energy: 0.5, rms: 0.5 };
