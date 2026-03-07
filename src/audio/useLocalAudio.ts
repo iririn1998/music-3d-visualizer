@@ -16,11 +16,15 @@ export function useLocalAudio() {
   const prevTimeRef = useRef<number>(performance.now());
   const loadTokenRef = useRef<number>(0);
 
-  const { sensitivity, setAudioData, setSmoothedAudioData, setPlaybackState, smoothedAudioData } =
-    useAudioStore();
+  // セレクタで必要なアクション・値のみを個別に購読し、不要な再レンダリングを防ぐ
+  const sensitivity = useAudioStore((s) => s.sensitivity);
+  const setAudioData = useAudioStore((s) => s.setAudioData);
+  const setSmoothedAudioData = useAudioStore((s) => s.setSmoothedAudioData);
+  const setPlaybackState = useAudioStore((s) => s.setPlaybackState);
 
-  const smoothedRef = useRef(smoothedAudioData);
-  smoothedRef.current = smoothedAudioData;
+  // smoothedAudioData はストアから購読せず、ref で完結させる
+  // （rAFループ内でのみ参照・更新するため、コンポーネントの再レンダリングは不要）
+  const smoothedRef = useRef(useAudioStore.getState().smoothedAudioData);
 
   const startLoop = useCallback(() => {
     // Reset the timestamp so the first delta after a restart is near zero
@@ -36,6 +40,7 @@ export function useLocalAudio() {
         setAudioData(raw);
 
         const smoothed = dampAudioData(smoothedRef.current, raw, SMOOTHING_LAMBDA, delta);
+        smoothedRef.current = smoothed;
         setSmoothedAudioData(smoothed);
       }
 
