@@ -1,5 +1,10 @@
 import { create } from 'zustand';
-import { type AudioData, type PlaybackState, type VisualizerMode, DEFAULT_AUDIO_DATA } from '../types/audio';
+import {
+  type AudioData,
+  type PlaybackState,
+  type VisualizerMode,
+  DEFAULT_AUDIO_DATA,
+} from '../types/audio';
 
 interface AudioStore {
   audioData: AudioData;
