@@ -380,5 +380,4 @@ describe('AudioAnalyzer', () => {
       expect(first).toHaveBeenCalledOnce(); // not called again
     });
   });
-
 });
