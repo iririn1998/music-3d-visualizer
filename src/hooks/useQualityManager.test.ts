@@ -4,7 +4,13 @@ import { useQualityStore } from '../stores/qualityStore';
 describe('qualityStore', () => {
   beforeEach(() => {
     useQualityStore.setState({
-      settings: { level: 'high', particleCount: 10000, geometryDetail: 3, dpr: 2, bloomEnabled: true },
+      settings: {
+        level: 'high',
+        particleCount: 10000,
+        geometryDetail: 3,
+        dpr: 2,
+        bloomEnabled: true,
+      },
       autoMode: true,
     });
   });

@@ -33,12 +33,7 @@ export function Experience() {
       <pointLight position={[5, 5, 5]} intensity={1.5} color={primaryHex} />
       <pointLight position={[-5, -3, 3]} intensity={0.8} color={secondaryHex} />
 
-      <OrbitControls
-        enableDamping
-        dampingFactor={0.05}
-        maxDistance={20}
-        minDistance={2}
-      />
+      <OrbitControls enableDamping dampingFactor={0.05} maxDistance={20} minDistance={2} />
 
       <group ref={groupRef}>
         <mesh>
