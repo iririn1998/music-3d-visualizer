@@ -91,7 +91,9 @@ export function useLocalAudio() {
   useEffect(() => {
     return () => {
       stopLoop();
-      analyzerRef.current?.dispose();
+      void analyzerRef.current?.dispose().catch((error) => {
+        console.error('Failed to dispose AudioAnalyzer in useLocalAudio cleanup:', error);
+      });
     };
   }, [stopLoop]);
 
