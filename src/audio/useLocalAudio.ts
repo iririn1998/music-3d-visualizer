@@ -82,6 +82,7 @@ export function useLocalAudio() {
 
   /** 再生を停止する */
   const stop = useCallback(() => {
+    ++loadTokenRef.current; // invalidate any in-flight loadFile
     stopLoop();
     analyzerRef.current?.stop();
     setPlaybackState('idle');
@@ -95,6 +96,7 @@ export function useLocalAudio() {
   /** アンマウント時にリソースを解放する */
   useEffect(() => {
     return () => {
+      ++loadTokenRef.current; // invalidate any in-flight loadFile
       stopLoop();
       void analyzerRef.current?.dispose().catch((error) => {
         console.error('Failed to dispose AudioAnalyzer in useLocalAudio cleanup:', error);
