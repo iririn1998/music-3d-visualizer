@@ -16,7 +16,7 @@ export class AudioAnalyzer {
   private source: AudioBufferSourceNode | MediaElementAudioSourceNode | null = null;
   private gainNode: GainNode | null = null;
 
-  private frequencyData: Uint8Array = new Uint8Array(0);
+  private frequencyData: Uint8Array<ArrayBuffer> = new Uint8Array(0);
   private _currentData: AudioData = { ...DEFAULT_AUDIO_DATA };
   private _onEnded: (() => void) | null = null;
 
@@ -131,7 +131,7 @@ export class AudioAnalyzer {
   /**
    * 周波数バッファを bass / mid / treble / energy / rms に分解し、0〜1 に正規化する。
    */
-  private extractAudioData(data: Uint8Array, sampleRate: number): AudioData {
+  private extractAudioData(data: Uint8Array<ArrayBuffer>, sampleRate: number): AudioData {
     const binCount = data.length;
     const nyquist = sampleRate / 2;
     const hzPerBin = nyquist / binCount;
@@ -159,7 +159,7 @@ export class AudioAnalyzer {
     return { bass, mid, treble, energy, rms };
   }
 
-  private averageRange(data: Uint8Array, start: number, end: number): number {
+  private averageRange(data: Uint8Array<ArrayBuffer>, start: number, end: number): number {
     if (start >= end) return 0;
     let sum = 0;
     for (let i = start; i < end; i++) {

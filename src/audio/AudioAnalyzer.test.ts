@@ -14,7 +14,7 @@ function bandIndices(binCount: number, sampleRate: number) {
   };
 }
 
-function uniform(length: number, value: number): Uint8Array {
+function uniform(length: number, value: number): Uint8Array<ArrayBuffer> {
   return new Uint8Array(length).fill(value);
 }
 
@@ -23,11 +23,11 @@ describe('AudioAnalyzer', () => {
 
   // Private method accessors
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const extract = (inst: AudioAnalyzer, data: Uint8Array, sampleRate: number) =>
+  const extract = (inst: AudioAnalyzer, data: Uint8Array<ArrayBuffer>, sampleRate: number) =>
     (inst as any).extractAudioData(data, sampleRate);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const avg = (inst: AudioAnalyzer, data: Uint8Array, start: number, end: number) =>
+  const avg = (inst: AudioAnalyzer, data: Uint8Array<ArrayBuffer>, start: number, end: number) =>
     (inst as any).averageRange(data, start, end);
 
   beforeEach(() => {
