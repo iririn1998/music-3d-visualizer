@@ -21,8 +21,8 @@ interface AudioStore {
 }
 
 export const useAudioStore = create<AudioStore>((set) => ({
-  audioData: DEFAULT_AUDIO_DATA,
-  smoothedAudioData: DEFAULT_AUDIO_DATA,
+  audioData: { ...DEFAULT_AUDIO_DATA },
+  smoothedAudioData: { ...DEFAULT_AUDIO_DATA },
   playbackState: 'idle',
   mode: 'core',
   sensitivity: 1.0,
