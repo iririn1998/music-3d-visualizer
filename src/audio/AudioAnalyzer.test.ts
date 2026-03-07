@@ -146,12 +146,17 @@ describe('AudioAnalyzer', () => {
   // extractAudioData – edge cases: low sample rate / index clamping
   // ---------------------------------------------------------------------------
   describe('extractAudioData – low sample rate edge cases', () => {
-    it('treble is 0 when midEnd >= binCount (MID_MAX_HZ covers entire spectrum)', () => {
+    it('clamps midEnd to binCount so treble=0 and mid is finite (sampleRate=1000)', () => {
       // sampleRate=1000, binCount=4: nyquist=500, hzPerBin=125
-      // midEnd = floor(4000/125) = 32 >> 4, so treble range is empty
+      // rawBassEnd=floor(250/125)=2, rawMidEnd=floor(4000/125)=32 >> 4
+      // After clamping: bassEnd=2, midEnd=4=binCount
+      // bass = avg([255,255])/255 = 1, mid = avg([128,128])/255, treble = 0 (empty range)
       const data = new Uint8Array([255, 255, 128, 128]) as Uint8Array<ArrayBuffer>;
       const result = extract(analyzer, data, 1000);
       expect(result.treble).toBe(0);
+      expect(result.bass).toBeCloseTo(1, 6);
+      expect(Number.isFinite(result.mid)).toBe(true);
+      expect(result.mid).toBeCloseTo(128 / 255, 6);
     });
 
     it('bass is 0 when bassEnd is 0 (hzPerBin exceeds BASS_MAX_HZ)', () => {
@@ -161,14 +166,16 @@ describe('AudioAnalyzer', () => {
       expect(result.bass).toBe(0);
     });
 
-    it('produces finite values for a typical low-rate scenario (sampleRate=8000)', () => {
-      // binCount=1024, sampleRate=8000: hzPerBin≈3.9, midEnd≈1025 > 1024
+    it('all fields are finite when rawMidEnd exactly equals binCount (sampleRate=8000)', () => {
+      // sampleRate=8000, binCount=1024: hzPerBin=4000/1024≈3.906
+      // rawMidEnd = floor(4000/3.906) = 1024 = binCount → clamps cleanly to binCount
+      // treble range [1024, 1024) is empty → treble=0; mid covers [bassEnd, 1024)
       const data = uniform(1024, 128);
       const result = extract(analyzer, data, 8000);
-      // bass and treble are finite and in range
-      expect(Number.isFinite(result.bass)).toBe(true);
-      expect(Number.isFinite(result.treble)).toBe(true);
-      expect(result.treble).toBe(0); // midEnd clamps beyond binCount
+      for (const key of ['bass', 'mid', 'treble', 'energy', 'rms'] as const) {
+        expect(Number.isFinite(result[key]), key).toBe(true);
+      }
+      expect(result.treble).toBe(0);
       expect(result.energy).toBeCloseTo(128 / 255, 6);
       expect(result.rms).toBeCloseTo(128 / 255, 6);
     });

@@ -120,8 +120,12 @@ export class AudioAnalyzer {
     const nyquist = sampleRate / 2;
     const hzPerBin = nyquist / binCount;
 
-    const bassEnd = Math.floor(BASS_MAX_HZ / hzPerBin);
-    const midEnd = Math.floor(MID_MAX_HZ / hzPerBin);
+    const rawBassEnd = Math.floor(BASS_MAX_HZ / hzPerBin);
+    const rawMidEnd = Math.floor(MID_MAX_HZ / hzPerBin);
+
+    // Clamp band boundaries to valid bin ranges and ensure ordering: 0 <= bassEnd <= midEnd <= binCount
+    const bassEnd = Math.min(Math.max(rawBassEnd, 0), binCount);
+    const midEnd = Math.min(Math.max(rawMidEnd, bassEnd), binCount);
 
     const bass = this.averageRange(data, 0, bassEnd) / 255;
     const mid = this.averageRange(data, bassEnd, midEnd) / 255;
