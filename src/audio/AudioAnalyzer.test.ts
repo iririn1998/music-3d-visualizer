@@ -278,7 +278,11 @@ describe('AudioAnalyzer', () => {
 
     it('stop() tolerates a node whose disconnect() throws', () => {
       const inst = priv(analyzer);
-      inst.source = makeNode({ disconnect: vi.fn().mockImplementation(() => { throw new Error('already disconnected'); }) });
+      inst.source = makeNode({
+        disconnect: vi.fn().mockImplementation(() => {
+          throw new Error('already disconnected');
+        }),
+      });
 
       expect(() => analyzer.stop()).not.toThrow();
       expect(inst.source).toBeNull();
