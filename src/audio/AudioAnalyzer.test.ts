@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AudioAnalyzer } from './AudioAnalyzer';
 
 // Frequency band boundaries, mirroring the constants in AudioAnalyzer.ts
@@ -208,6 +208,80 @@ describe('AudioAnalyzer', () => {
       const data = new Uint8Array([0, 100, 200, 155]) as Uint8Array<ArrayBuffer>;
       const expected = (0 + 100 + 200 + 155) / 4;
       expect(avg(analyzer, data, 0, 4)).toBeCloseTo(expected, 6);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // stop() – node disconnection and state cleanup
+  // ---------------------------------------------------------------------------
+  describe('stop()', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const priv = (inst: AudioAnalyzer) => inst as any;
+
+    function makeNode(extra: object = {}): AudioNode {
+      return { disconnect: vi.fn(), ...extra } as unknown as AudioNode;
+    }
+
+    it('nulls source, gainNode, and analyser after stop()', () => {
+      const inst = priv(analyzer);
+      inst.source = makeNode({ stop: vi.fn() });
+      inst.gainNode = makeNode();
+      inst.analyser = makeNode();
+
+      analyzer.stop();
+
+      expect(inst.source).toBeNull();
+      expect(inst.gainNode).toBeNull();
+      expect(inst.analyser).toBeNull();
+    });
+
+    it('disconnects all three nodes', () => {
+      const inst = priv(analyzer);
+      const sourceDisconnect = vi.fn();
+      const gainDisconnect = vi.fn();
+      const analyserDisconnect = vi.fn();
+
+      inst.source = makeNode({ stop: vi.fn(), disconnect: sourceDisconnect });
+      inst.gainNode = makeNode({ disconnect: gainDisconnect });
+      inst.analyser = makeNode({ disconnect: analyserDisconnect });
+
+      analyzer.stop();
+
+      expect(sourceDisconnect).toHaveBeenCalledOnce();
+      expect(gainDisconnect).toHaveBeenCalledOnce();
+      expect(analyserDisconnect).toHaveBeenCalledOnce();
+    });
+
+    it('resets _currentData to DEFAULT_AUDIO_DATA', () => {
+      const inst = priv(analyzer);
+      inst._currentData = { bass: 0.9, mid: 0.8, treble: 0.7, energy: 0.6, rms: 0.5 };
+
+      analyzer.stop();
+
+      expect(inst._currentData).toEqual({ bass: 0, mid: 0, treble: 0, energy: 0, rms: 0 });
+    });
+
+    it('update() returns DEFAULT_AUDIO_DATA when called after stop() (analyser is null)', () => {
+      const inst = priv(analyzer);
+      inst.analyser = null;
+      inst._currentData = { bass: 0.5, mid: 0.5, treble: 0.5, energy: 0.5, rms: 0.5 };
+
+      const result = analyzer.update();
+
+      expect(result).toEqual({ bass: 0.5, mid: 0.5, treble: 0.5, energy: 0.5, rms: 0.5 });
+    });
+
+    it('stop() is idempotent when nodes are already null', () => {
+      expect(() => analyzer.stop()).not.toThrow();
+      expect(() => analyzer.stop()).not.toThrow();
+    });
+
+    it('stop() tolerates a node whose disconnect() throws', () => {
+      const inst = priv(analyzer);
+      inst.source = makeNode({ disconnect: vi.fn().mockImplementation(() => { throw new Error('already disconnected'); }) });
+
+      expect(() => analyzer.stop()).not.toThrow();
+      expect(inst.source).toBeNull();
     });
   });
 

@@ -154,14 +154,41 @@ export class AudioAnalyzer {
 
   /** 再生を停止し、リソースを解放する */
   stop(): void {
-    if (this.source && 'stop' in this.source) {
-      try {
-        (this.source as AudioBufferSourceNode).stop();
-      } catch {
-        // すでに停止済みの場合は無視
+    if (this.source) {
+      if ('stop' in this.source) {
+        try {
+          (this.source as AudioBufferSourceNode).stop();
+        } catch {
+          // すでに停止済みの場合は無視
+        }
       }
+      try {
+        // AudioNode としてオーディオグラフから切り離す
+        (this.source as unknown as AudioNode).disconnect();
+      } catch {
+        // すでに disconnect 済みの場合は無視
+      }
+      this.source = null;
     }
-    this.source = null;
+
+    if (this.gainNode) {
+      try {
+        this.gainNode.disconnect();
+      } catch {
+        // すでに disconnect 済みの場合は無視
+      }
+      this.gainNode = null;
+    }
+
+    if (this.analyser) {
+      try {
+        this.analyser.disconnect();
+      } catch {
+        // すでに disconnect 済みの場合は無視
+      }
+      this.analyser = null;
+    }
+
     this._currentData = { ...DEFAULT_AUDIO_DATA };
   }
 
@@ -171,8 +198,6 @@ export class AudioAnalyzer {
     if (this.context) {
       await this.context.close();
       this.context = null;
-      this.analyser = null;
-      this.gainNode = null;
     }
   }
 }
