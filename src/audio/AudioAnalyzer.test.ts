@@ -14,8 +14,8 @@ function bandIndices(binCount: number, sampleRate: number) {
   };
 }
 
-function uniform(length: number, value: number): Uint8Array<ArrayBuffer> {
-  return new Uint8Array(length).fill(value) as Uint8Array<ArrayBuffer>;
+function uniform(length: number, value: number): Uint8Array {
+  return new Uint8Array(length).fill(value);
 }
 
 describe('AudioAnalyzer', () => {
@@ -23,11 +23,11 @@ describe('AudioAnalyzer', () => {
 
   // Private method accessors
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const extract = (inst: AudioAnalyzer, data: Uint8Array<ArrayBuffer>, sampleRate: number) =>
+  const extract = (inst: AudioAnalyzer, data: Uint8Array, sampleRate: number) =>
     (inst as any).extractAudioData(data, sampleRate);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const avg = (inst: AudioAnalyzer, data: Uint8Array<ArrayBuffer>, start: number, end: number) =>
+  const avg = (inst: AudioAnalyzer, data: Uint8Array, start: number, end: number) =>
     (inst as any).averageRange(data, start, end);
 
   beforeEach(() => {
@@ -125,7 +125,7 @@ describe('AudioAnalyzer', () => {
 
     it('rms matches the manual root-mean-square calculation', () => {
       const raw = [0, 85, 170, 255];
-      const data = new Uint8Array(raw) as Uint8Array<ArrayBuffer>;
+      const data = new Uint8Array(raw);
 
       const sumSq = raw.reduce((acc, v) => acc + (v / 255) ** 2, 0);
       const expectedRms = Math.sqrt(sumSq / raw.length);
@@ -151,7 +151,7 @@ describe('AudioAnalyzer', () => {
       // rawBassEnd=floor(250/125)=2, rawMidEnd=floor(4000/125)=32 >> 4
       // After clamping: bassEnd=2, midEnd=4=binCount
       // bass = avg([255,255])/255 = 1, mid = avg([128,128])/255, treble = 0 (empty range)
-      const data = new Uint8Array([255, 255, 128, 128]) as Uint8Array<ArrayBuffer>;
+      const data = new Uint8Array([255, 255, 128, 128]);
       const result = extract(analyzer, data, 1000);
       expect(result.treble).toBe(0);
       expect(result.bass).toBeCloseTo(1, 6);
@@ -161,7 +161,7 @@ describe('AudioAnalyzer', () => {
 
     it('bass is 0 when bassEnd is 0 (hzPerBin exceeds BASS_MAX_HZ)', () => {
       // sampleRate=44100, binCount=4: hzPerBin=5512.5, bassEnd=floor(250/5512.5)=0
-      const data = new Uint8Array([255, 255, 255, 255]) as Uint8Array<ArrayBuffer>;
+      const data = new Uint8Array([255, 255, 255, 255]);
       const result = extract(analyzer, data, 44100);
       expect(result.bass).toBe(0);
     });
@@ -194,18 +194,18 @@ describe('AudioAnalyzer', () => {
     });
 
     it('returns the correct average over a range', () => {
-      const data = new Uint8Array([0, 50, 100, 200, 255]) as Uint8Array<ArrayBuffer>;
+      const data = new Uint8Array([0, 50, 100, 200, 255]);
       // Range [1, 4): values 50, 100, 200 → average = 350/3
       expect(avg(analyzer, data, 1, 4)).toBeCloseTo((50 + 100 + 200) / 3, 6);
     });
 
     it('returns the value itself for a single-element range', () => {
-      const data = new Uint8Array([10, 128, 240]) as Uint8Array<ArrayBuffer>;
+      const data = new Uint8Array([10, 128, 240]);
       expect(avg(analyzer, data, 1, 2)).toBe(128);
     });
 
     it('returns correct average over the full array', () => {
-      const data = new Uint8Array([0, 100, 200, 155]) as Uint8Array<ArrayBuffer>;
+      const data = new Uint8Array([0, 100, 200, 155]);
       const expected = (0 + 100 + 200 + 155) / 4;
       expect(avg(analyzer, data, 0, 4)).toBeCloseTo(expected, 6);
     });
