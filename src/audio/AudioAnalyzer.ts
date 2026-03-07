@@ -18,9 +18,15 @@ export class AudioAnalyzer {
 
   private frequencyData: Uint8Array<ArrayBuffer> = new Uint8Array(0);
   private _currentData: AudioData = { ...DEFAULT_AUDIO_DATA };
+  private _onEnded: (() => void) | null = null;
 
   get currentData(): AudioData {
     return this._currentData;
+  }
+
+  /** バッファの自然終了時に呼び出されるコールバックを登録する。null を渡すと解除。 */
+  setOnEnded(callback: (() => void) | null): void {
+    this._onEnded = callback;
   }
 
   private ensureContext(): AudioContext {
@@ -67,6 +73,16 @@ export class AudioAnalyzer {
     gainNode.connect(analyser);
     analyser.connect(ctx.destination);
     source.start(0);
+
+    // When the buffer finishes playing naturally, clean up and notify the consumer.
+    // The guard ensures this is skipped if stop() was already called manually
+    // (stop() nulls this.source synchronously, so the check fails when onended fires).
+    source.onended = () => {
+      if (this.source === source) {
+        this.stop();
+        this._onEnded?.();
+      }
+    };
 
     this.source = source;
   }

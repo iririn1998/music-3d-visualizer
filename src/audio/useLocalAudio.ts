@@ -52,6 +52,10 @@ export function useLocalAudio() {
     async (file: File) => {
       if (!analyzerRef.current) {
         analyzerRef.current = new AudioAnalyzer();
+        analyzerRef.current.setOnEnded(() => {
+          stopLoop();
+          setPlaybackState('idle');
+        });
       }
       stopLoop();
       await analyzerRef.current.loadFile(file, sensitivity);

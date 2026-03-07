@@ -286,6 +286,98 @@ describe('AudioAnalyzer', () => {
   });
 
   // ---------------------------------------------------------------------------
+  // setOnEnded / source.onended – natural playback completion
+  // ---------------------------------------------------------------------------
+  describe('setOnEnded()', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const priv = (inst: AudioAnalyzer) => inst as any;
+
+    /** Simulates the state AudioAnalyzer is in after loadFile() completes. */
+    function seedLoadedState(inst: AudioAnalyzer) {
+      const p = priv(inst);
+      const source = {
+        stop: vi.fn(),
+        disconnect: vi.fn(),
+        onended: null as (() => void) | null,
+      };
+      p.source = source;
+      p.gainNode = { disconnect: vi.fn() };
+      p.analyser = { disconnect: vi.fn() };
+      // Simulate the assignment that loadFile() does after source.start():
+      // the onended handler is set, then this.source = source.
+      // We replicate it here so tests can trigger it directly.
+      source.onended = () => {
+        if (p.source === source) {
+          inst.stop();
+          p._onEnded?.();
+        }
+      };
+      return source;
+    }
+
+    it('fires the callback when audio ends naturally', () => {
+      const onEnded = vi.fn();
+      analyzer.setOnEnded(onEnded);
+      const source = seedLoadedState(analyzer);
+
+      source.onended!();
+
+      expect(onEnded).toHaveBeenCalledOnce();
+    });
+
+    it('calls stop() (nulls all nodes) when audio ends naturally', () => {
+      analyzer.setOnEnded(vi.fn());
+      const source = seedLoadedState(analyzer);
+
+      source.onended!();
+
+      expect(priv(analyzer).source).toBeNull();
+      expect(priv(analyzer).gainNode).toBeNull();
+      expect(priv(analyzer).analyser).toBeNull();
+    });
+
+    it('does NOT fire the callback after manual stop() (this.source nulled before onended fires)', () => {
+      const onEnded = vi.fn();
+      analyzer.setOnEnded(onEnded);
+      const source = seedLoadedState(analyzer);
+
+      // Manual stop() nulls this.source synchronously.
+      analyzer.stop();
+      // onended fires asynchronously (simulated here by calling it directly after stop).
+      source.onended!();
+
+      expect(onEnded).not.toHaveBeenCalled();
+    });
+
+    it('can be cleared by passing null, preventing the callback from firing', () => {
+      const onEnded = vi.fn();
+      analyzer.setOnEnded(onEnded);
+      analyzer.setOnEnded(null);
+      const source = seedLoadedState(analyzer);
+
+      source.onended!();
+
+      expect(onEnded).not.toHaveBeenCalled();
+    });
+
+    it('can be updated between playbacks without reinstantiating the analyzer', () => {
+      const first = vi.fn();
+      const second = vi.fn();
+
+      analyzer.setOnEnded(first);
+      const source1 = seedLoadedState(analyzer);
+      source1.onended!();
+      expect(first).toHaveBeenCalledOnce();
+
+      analyzer.setOnEnded(second);
+      const source2 = seedLoadedState(analyzer);
+      source2.onended!();
+      expect(second).toHaveBeenCalledOnce();
+      expect(first).toHaveBeenCalledOnce(); // not called again
+    });
+  });
+
+  // ---------------------------------------------------------------------------
   // dampAudioData – placeholder for smoothing/interpolation tests
   // (implement once the method is introduced)
   // ---------------------------------------------------------------------------
