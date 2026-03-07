@@ -381,9 +381,4 @@ describe('AudioAnalyzer', () => {
     });
   });
 
-  // ---------------------------------------------------------------------------
-  // dampAudioData – placeholder for smoothing/interpolation tests
-  // (implement once the method is introduced)
-  // ---------------------------------------------------------------------------
-  describe.todo('dampAudioData – interpolation / smoothing');
 });
