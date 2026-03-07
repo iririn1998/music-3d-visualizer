@@ -10,6 +10,11 @@ vi.mock('@react-three/drei', () => ({
   OrbitControls: () => null,
 }));
 
+vi.mock('@react-three/postprocessing', () => ({
+  EffectComposer: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  Bloom: () => null,
+}));
+
 import App from '../App';
 
 describe('App', () => {

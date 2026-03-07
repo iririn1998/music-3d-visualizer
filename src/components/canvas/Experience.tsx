@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { type Group } from 'three';
 import { useTheme } from '../../hooks/useTheme';
+import { useQualityManager } from '../../hooks/useQualityManager';
 import { useThemeStore } from '../../stores/themeStore';
 
 /**
@@ -13,6 +14,7 @@ export function Experience() {
   const groupRef = useRef<Group>(null);
 
   useTheme();
+  useQualityManager();
 
   const currentColors = useThemeStore((s) => s.currentColors);
 
