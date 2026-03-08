@@ -49,11 +49,7 @@ export function Experience() {
       <group ref={groupRef}>
         <mesh>
           <icosahedronGeometry args={[1.5, 3]} />
-          <meshStandardMaterial
-            ref={materialRef}
-            wireframe
-            emissiveIntensity={0.4}
-          />
+          <meshStandardMaterial ref={materialRef} wireframe emissiveIntensity={0.4} />
         </mesh>
       </group>
     </>
