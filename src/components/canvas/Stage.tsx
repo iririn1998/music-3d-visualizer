@@ -5,8 +5,8 @@ import { ParticleVisualizer } from './visualizers/ParticleVisualizer';
 
 /**
  * ビジュアライザーモードに応じた 3D オブジェクトを切り替えるディスパッチャー。
- * モード変更時にコンポーネントがアンマウント→再マウントされることで、
- * カメラ・色・エフェクト状態が自然にリセットされる。
+ * モード変更時に対応するビジュアライザーコンポーネントがアンマウント→再マウントされることで、
+ * そのビジュアライザー固有の 3D オブジェクトや内部状態が自然にリセットされる。
  */
 export function Stage() {
   const mode = useAudioStore((s) => s.mode);
