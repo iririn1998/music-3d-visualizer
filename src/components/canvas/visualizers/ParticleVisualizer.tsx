@@ -98,5 +98,12 @@ export function ParticleVisualizer() {
     }
   });
 
-  return <points ref={pointsRef} geometry={geometry} material={shaderMaterial} />;
+  return (
+    <points
+      ref={pointsRef}
+      geometry={geometry}
+      material={shaderMaterial}
+      frustumCulled={false}
+    />
+  );
 }
