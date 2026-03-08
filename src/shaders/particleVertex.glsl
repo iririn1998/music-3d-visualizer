@@ -32,5 +32,6 @@ void main() {
   vAlpha = smoothstep(12.0, 0.0, vDist) * (0.5 + uEnergy * 0.5);
 
   gl_Position = projectionMatrix * mvPosition;
-  gl_PointSize = uParticleSize * (200.0 / -mvPosition.z);
+  float pointSize = uParticleSize * (200.0 / max(-mvPosition.z, 0.1));
+  gl_PointSize = clamp(pointSize, 1.0, 64.0);
 }
