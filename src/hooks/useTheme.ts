@@ -34,17 +34,25 @@ export function useTheme() {
     accent: new Color('#cc33ff'),
   });
   const bloomRef = useRef(1.0);
-
-  const setCurrentColors = useThemeStore((s) => s.setCurrentColors);
-  const setBloomIntensity = useThemeStore((s) => s.setBloomIntensity);
-  const preset = useThemeStore((s) => s.preset);
+  const presetRef = useRef(useThemeStore.getState().preset);
 
   useFrame((_state, delta) => {
     const { smoothedAudioData } = useAudioStore.getState();
+    const { preset, setCurrentColors, setBloomIntensity } = useThemeStore.getState();
     const { energy, bass, rms } = smoothedAudioData;
 
+    // When the preset changes externally, snap colorsRef to the new palette so
+    // the lerp starts from the correct base instead of the stale previous color.
+    if (presetRef.current !== preset) {
+      const newPalette = COLOR_PRESETS[preset];
+      colorsRef.current.primary.copy(newPalette.primary);
+      colorsRef.current.secondary.copy(newPalette.secondary);
+      colorsRef.current.accent.copy(newPalette.accent);
+      presetRef.current = preset;
+    }
+
     const autoPreset = getTargetPresetByEnergy(energy, bass);
-    const targetPalette = COLOR_PRESETS[autoPreset] ?? COLOR_PRESETS[preset];
+    const targetPalette = COLOR_PRESETS[autoPreset];
 
     const lerpFactor = 1 - Math.exp(-COLOR_LERP_SPEED * delta);
 
