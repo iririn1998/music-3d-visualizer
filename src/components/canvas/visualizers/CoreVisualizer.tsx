@@ -7,6 +7,12 @@ import { currentColorsRef } from '../../../hooks/useTheme';
 import coreVertexShader from '../../../shaders/coreVertex.glsl?raw';
 import coreFragmentShader from '../../../shaders/coreFragment.glsl?raw';
 
+const GEOMETRY_DETAIL = {
+  low: 12,
+  medium: 24,
+  high: 48,
+} as const;
+
 /**
  * "The Pulsing Core" — 球体ビジュアライザー。
  *
@@ -21,13 +27,13 @@ export function CoreVisualizer() {
   const detail = useMemo(() => {
     switch (geometryDetail) {
       case 1:
-        return 12;
+        return GEOMETRY_DETAIL.low;
       case 2:
-        return 24;
+        return GEOMETRY_DETAIL.medium;
       case 3:
-        return 48;
+        return GEOMETRY_DETAIL.high;
       default:
-        return 24;
+        return GEOMETRY_DETAIL.medium;
     }
   }, [geometryDetail]);
 
