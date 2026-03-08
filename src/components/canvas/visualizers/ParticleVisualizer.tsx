@@ -18,6 +18,7 @@ const RADIUS_RANGE = 6.0;
 const MIN_SPEED = 0.2;
 const SPEED_RANGE = 1.0;
 const DEFAULT_PARTICLE_SIZE = 3.0;
+const ROTATION_SPEED = 0.001;
 
 function buildParticleGeometry(count: number) {
   const geo = new BufferGeometry();
@@ -93,7 +94,7 @@ export function ParticleVisualizer() {
     uniforms.uAccentColor.value.copy(currentColorsRef.accent);
 
     if (pointsRef.current) {
-      pointsRef.current.rotation.y += 0.001;
+      pointsRef.current.rotation.y += ROTATION_SPEED;
     }
   });
 
