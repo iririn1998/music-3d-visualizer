@@ -15,7 +15,8 @@ void main() {
 
   float midWave = sin(wavePhase) * uMid * 1.5;
 
-  float energyWave = smoothstep(0.0, 1.0, 1.0 - abs(dist - uTime * 3.0) * 0.1) * uEnergy * 2.0;
+  float waveTime = mod(uTime * 3.0, 100.0);
+  float energyWave = smoothstep(0.0, 1.0, 1.0 - abs(dist - waveTime) * 0.1) * uEnergy * 2.0;
 
   float height = midWave + energyWave;
   vHeight = height;
