@@ -53,7 +53,7 @@ function buildGridGeometry(gridSize: number) {
  *
  * InstancedBufferGeometry による高速描画。
  * 中音域(mid)でグリッドが波形にうねり、
- * エネルギー(energy)で奥から手前へ光の波が走る。
+ * エネルギー(energy)で中心から外側へ放射状に光の波が広がる。
  */
 export function GridVisualizer() {
   const geometryDetail = useQualityStore((s) => s.settings.geometryDetail);
