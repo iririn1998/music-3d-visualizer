@@ -17,6 +17,7 @@ const MIN_RADIUS = 0.5;
 const RADIUS_RANGE = 6.0;
 const MIN_SPEED = 0.2;
 const SPEED_RANGE = 1.0;
+const DEFAULT_PARTICLE_SIZE = 3.0;
 
 function buildParticleGeometry(count: number) {
   const geo = new BufferGeometry();
@@ -69,7 +70,7 @@ export function ParticleVisualizer() {
           uRms: { value: 0 },
           uEnergy: { value: 0 },
           uBass: { value: 0 },
-          uParticleSize: { value: 3.0 },
+          uParticleSize: { value: DEFAULT_PARTICLE_SIZE },
           uColor: { value: currentColorsRef.primary.clone() },
           uAccentColor: { value: currentColorsRef.accent.clone() },
         },
