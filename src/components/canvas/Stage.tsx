@@ -18,5 +18,10 @@ export function Stage() {
       return <GridVisualizer />;
     case 'vortex':
       return <ParticleVisualizer />;
+    default: {
+      const exhaustiveCheck: never = mode;
+      console.error(`Unhandled VisualizerMode: ${exhaustiveCheck}`);
+      return null;
+    }
   }
 }
