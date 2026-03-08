@@ -29,7 +29,7 @@ void main() {
   vec4 mvPosition = modelViewMatrix * vec4(x, y, z, 1.0);
 
   vDist = length(vec3(x, y, z));
-  vAlpha = smoothstep(12.0, 0.0, vDist) * (0.5 + uEnergy * 0.5);
+  vAlpha = (1.0 - smoothstep(0.0, 12.0, vDist)) * (0.5 + uEnergy * 0.5);
 
   gl_Position = projectionMatrix * mvPosition;
   float pointSize = uParticleSize * (200.0 / max(-mvPosition.z, 0.1));
