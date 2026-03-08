@@ -16,6 +16,12 @@ const GRID_SPACING = 1.2;
 const BOX_WIDTH = 0.15;
 const BOX_HEIGHT = 1.0;
 
+const GRID_SIZE = {
+  low: 20,
+  medium: 35,
+  high: 50,
+} as const;
+
 function buildGridGeometry(gridSize: number) {
   const base = new BoxGeometry(BOX_WIDTH, BOX_HEIGHT, BOX_WIDTH);
   const geo = new InstancedBufferGeometry();
@@ -55,13 +61,13 @@ export function GridVisualizer() {
   const gridSize = useMemo(() => {
     switch (geometryDetail) {
       case 1:
-        return 20;
+        return GRID_SIZE.low;
       case 2:
-        return 35;
+        return GRID_SIZE.medium;
       case 3:
-        return 50;
+        return GRID_SIZE.high;
       default:
-        return 35;
+        return GRID_SIZE.medium;
     }
   }, [geometryDetail]);
 
