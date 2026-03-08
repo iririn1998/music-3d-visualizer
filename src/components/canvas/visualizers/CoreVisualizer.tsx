@@ -13,6 +13,9 @@ const GEOMETRY_DETAIL = {
   high: 48,
 } as const;
 
+const ROTATION_SPEED_Y = 0.002;
+const ROTATION_SPEED_X = 0.001;
+
 /**
  * "The Pulsing Core" — 球体ビジュアライザー。
  *
@@ -70,8 +73,8 @@ export function CoreVisualizer() {
     uniforms.uAccentColor.value.copy(currentColorsRef.accent);
 
     if (meshRef.current) {
-      meshRef.current.rotation.y += 0.002;
-      meshRef.current.rotation.x += 0.001;
+      meshRef.current.rotation.y += ROTATION_SPEED_Y;
+      meshRef.current.rotation.x += ROTATION_SPEED_X;
     }
   });
 
