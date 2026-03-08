@@ -26,7 +26,6 @@ export function useQualityManager() {
   const frameCountRef = useRef(0);
   const elapsedRef = useRef(0);
   const upgradeTimerRef = useRef(0);
-  const lastFpsRef = useRef(60);
 
   useFrame((_state, delta) => {
     const { autoMode, settings, setQuality } = useQualityStore.getState();
@@ -38,7 +37,6 @@ export function useQualityManager() {
     if (elapsedRef.current < FPS_SAMPLE_INTERVAL) return;
 
     const fps = frameCountRef.current / elapsedRef.current;
-    lastFpsRef.current = fps;
     frameCountRef.current = 0;
     elapsedRef.current = 0;
 
