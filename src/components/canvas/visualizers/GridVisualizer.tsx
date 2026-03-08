@@ -13,9 +13,11 @@ import gridVertexShader from '../../../shaders/gridVertex.glsl?raw';
 import gridFragmentShader from '../../../shaders/gridFragment.glsl?raw';
 
 const GRID_SPACING = 1.2;
+const BOX_WIDTH = 0.15;
+const BOX_HEIGHT = 1.0;
 
 function buildGridGeometry(gridSize: number) {
-  const base = new BoxGeometry(0.15, 1.0, 0.15);
+  const base = new BoxGeometry(BOX_WIDTH, BOX_HEIGHT, BOX_WIDTH);
   const geo = new InstancedBufferGeometry();
   geo.index = base.index;
   geo.attributes.position = base.attributes.position;
