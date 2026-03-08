@@ -20,10 +20,14 @@ export function CoreVisualizer() {
 
   const detail = useMemo(() => {
     switch (geometryDetail) {
-      case 1: return 12;
-      case 2: return 24;
-      case 3: return 48;
-      default: return 24;
+      case 1:
+        return 12;
+      case 2:
+        return 24;
+      case 3:
+        return 48;
+      default:
+        return 24;
     }
   }, [geometryDetail]);
 
@@ -65,7 +69,5 @@ export function CoreVisualizer() {
     }
   });
 
-  return (
-    <mesh ref={meshRef} geometry={geometry} material={shaderMaterial} />
-  );
+  return <mesh ref={meshRef} geometry={geometry} material={shaderMaterial} />;
 }

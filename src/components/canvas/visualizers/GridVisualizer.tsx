@@ -52,10 +52,14 @@ export function GridVisualizer() {
 
   const gridSize = useMemo(() => {
     switch (geometryDetail) {
-      case 1: return 20;
-      case 2: return 35;
-      case 3: return 50;
-      default: return 35;
+      case 1:
+        return 20;
+      case 2:
+        return 35;
+      case 3:
+        return 50;
+      default:
+        return 35;
     }
   }, [geometryDetail]);
 
