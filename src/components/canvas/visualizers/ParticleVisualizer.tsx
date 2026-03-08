@@ -13,6 +13,11 @@ import { currentColorsRef } from '../../../hooks/useTheme';
 import particleVertexShader from '../../../shaders/particleVertex.glsl?raw';
 import particleFragmentShader from '../../../shaders/particleFragment.glsl?raw';
 
+const MIN_RADIUS = 0.5;
+const RADIUS_RANGE = 6.0;
+const MIN_SPEED = 0.2;
+const SPEED_RANGE = 1.0;
+
 function buildParticleGeometry(count: number) {
   const geo = new BufferGeometry();
   const positions = new Float32Array(count * 3);
@@ -27,8 +32,8 @@ function buildParticleGeometry(count: number) {
     positions[i * 3 + 2] = 0;
 
     angles[i] = Math.random() * Math.PI * 2;
-    radii[i] = 0.5 + Math.random() * 6.0;
-    speeds[i] = 0.2 + Math.random() * 1.0;
+    radii[i] = MIN_RADIUS + Math.random() * RADIUS_RANGE;
+    speeds[i] = MIN_SPEED + Math.random() * SPEED_RANGE;
     phases[i] = Math.random() * Math.PI * 2;
   }
 
