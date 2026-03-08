@@ -78,12 +78,5 @@ export function CoreVisualizer() {
     }
   });
 
-  return (
-    <mesh
-      ref={meshRef}
-      geometry={geometry}
-      material={shaderMaterial}
-      frustumCulled={false}
-    />
-  );
+  return <mesh ref={meshRef} geometry={geometry} material={shaderMaterial} frustumCulled={false} />;
 }
