@@ -8,9 +8,9 @@ import coreVertexShader from '../../../shaders/coreVertex.glsl?raw';
 import coreFragmentShader from '../../../shaders/coreFragment.glsl?raw';
 
 const GEOMETRY_DETAIL = {
-  low: 12,
-  medium: 24,
-  high: 48,
+  low: 2,
+  medium: 3,
+  high: 4,
 } as const;
 
 const ROTATION_SPEED_Y = 0.002;
