@@ -76,6 +76,8 @@ export function VisualizerControls() {
                     type="button"
                     onClick={() => setPreset(opt.value)}
                     title={opt.label}
+                    aria-label={opt.label}
+                    aria-pressed={preset === opt.value}
                     className={`h-6 w-6 rounded-full border-2 transition-all duration-200
                       ${
                         preset === opt.value
