@@ -9,7 +9,11 @@ export function useReducedMotionSync() {
   const setReducedMotion = useAccessibilityStore((s) => s.setReducedMotion);
 
   useEffect(() => {
+    if (typeof window === 'undefined' || !('matchMedia' in window)) return;
+
     const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setReducedMotion(mql.matches);
+
     const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
     mql.addEventListener('change', handler);
     return () => mql.removeEventListener('change', handler);

@@ -13,7 +13,7 @@ interface AccessibilityStore {
 export const useAccessibilityStore = create<AccessibilityStore>((set) => ({
   shakeEnabled: true,
   shakeIntensity: 0.5,
-  reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  reducedMotion: false,
 
   setShakeEnabled: (shakeEnabled) => set({ shakeEnabled }),
   setShakeIntensity: (shakeIntensity) => set({ shakeIntensity }),
