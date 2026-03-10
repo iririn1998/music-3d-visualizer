@@ -7,7 +7,8 @@ import { useAccessibilityStore } from '../stores/accessibilityStore';
 const SHAKE_DECAY = 8;
 const MAX_OFFSET = 0.15;
 
-const offset = new Vector3();
+const targetOffset = new Vector3();
+const diff = new Vector3();
 
 /**
  * 低音(Bass)に連動してカメラを小さく揺らすフック。
@@ -16,6 +17,7 @@ const offset = new Vector3();
  */
 export function useCameraShake() {
   const currentOffsetRef = useRef(new Vector3());
+  const prevOffsetRef = useRef(new Vector3());
   const { camera } = useThree();
 
   useFrame((_state, delta) => {
@@ -23,21 +25,23 @@ export function useCameraShake() {
     const { smoothedAudioData } = useAudioStore.getState();
 
     if (!shakeEnabled || reducedMotion) {
-      currentOffsetRef.current.lerp(offset.set(0, 0, 0), 1 - Math.exp(-SHAKE_DECAY * delta));
-      camera.position.add(currentOffsetRef.current);
-      return;
+      currentOffsetRef.current.lerp(targetOffset.set(0, 0, 0), 1 - Math.exp(-SHAKE_DECAY * delta));
+    } else {
+      const bass = smoothedAudioData.bass;
+      const strength = bass * shakeIntensity * MAX_OFFSET;
+
+      targetOffset.set(
+        (Math.random() - 0.5) * 2 * strength,
+        (Math.random() - 0.5) * 2 * strength,
+        (Math.random() - 0.5) * 2 * strength * 0.3,
+      );
+
+      currentOffsetRef.current.lerp(targetOffset, 1 - Math.exp(-SHAKE_DECAY * delta));
     }
 
-    const bass = smoothedAudioData.bass;
-    const strength = bass * shakeIntensity * MAX_OFFSET;
-
-    offset.set(
-      (Math.random() - 0.5) * 2 * strength,
-      (Math.random() - 0.5) * 2 * strength,
-      (Math.random() - 0.5) * 2 * strength * 0.3,
-    );
-
-    currentOffsetRef.current.lerp(offset, 1 - Math.exp(-SHAKE_DECAY * delta));
-    camera.position.add(currentOffsetRef.current);
+    // 前フレームのオフセットを打ち消してから今フレームのオフセットを加算
+    diff.subVectors(currentOffsetRef.current, prevOffsetRef.current);
+    camera.position.add(diff);
+    prevOffsetRef.current.copy(currentOffsetRef.current);
   });
 }
