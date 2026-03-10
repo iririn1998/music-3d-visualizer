@@ -26,7 +26,9 @@ export function AccessibilityPanel() {
 
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <span id="camera-shake-label" className="text-xs text-white/70">Camera Shake</span>
+            <span id="camera-shake-label" className="text-xs text-white/70">
+              Camera Shake
+            </span>
             <button
               type="button"
               role="switch"
