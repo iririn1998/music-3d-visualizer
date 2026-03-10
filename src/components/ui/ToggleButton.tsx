@@ -3,14 +3,17 @@ interface ToggleButtonProps {
   onClick: () => void;
   children: React.ReactNode;
   title?: string;
+  ariaLabel?: string;
 }
 
-export function ToggleButton({ active, onClick, children, title }: ToggleButtonProps) {
+export function ToggleButton({ active, onClick, children, title, ariaLabel }: ToggleButtonProps) {
   return (
     <button
       type="button"
       onClick={onClick}
       title={title}
+      aria-pressed={active}
+      aria-label={ariaLabel ?? title}
       className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200
         ${
           active
