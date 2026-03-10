@@ -6,6 +6,9 @@ vi.mock('@react-three/fiber', () => ({
     <div data-testid="canvas">{children}</div>
   ),
   useFrame: vi.fn(),
+  useThree: vi.fn(() => ({
+    camera: { position: { add: vi.fn() } },
+  })),
 }));
 
 vi.mock('@react-three/drei', () => ({
