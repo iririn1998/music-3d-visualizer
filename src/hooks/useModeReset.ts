@@ -1,0 +1,27 @@
+import { useEffect, useRef } from 'react';
+import { useThree } from '@react-three/fiber';
+import { Vector3 } from 'three';
+import { useAudioStore } from '../stores/audioStore';
+import type { VisualizerMode } from '../types/audio';
+
+const DEFAULT_CAMERA_POSITION = new Vector3(0, 0, 6);
+
+/**
+ * ビジュアライザーモードが変更された際に
+ * カメラ位置をデフォルトにリセットするフック。
+ */
+export function useModeReset() {
+  const { camera } = useThree();
+  const prevModeRef = useRef<VisualizerMode>(useAudioStore.getState().mode);
+
+  useEffect(() => {
+    const unsubscribe = useAudioStore.subscribe((state) => {
+      if (state.mode !== prevModeRef.current) {
+        prevModeRef.current = state.mode;
+        camera.position.copy(DEFAULT_CAMERA_POSITION);
+        camera.lookAt(0, 0, 0);
+      }
+    });
+    return unsubscribe;
+  }, [camera]);
+}

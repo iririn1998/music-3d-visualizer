@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { MathUtils } from 'three';
 import { useAudioStore } from '../stores/audioStore';
 import { useThemeStore } from '../stores/themeStore';
+import { useAccessibilityStore } from '../stores/accessibilityStore';
 import { COLOR_PRESETS, type ColorPalette, type ColorPreset } from '../types/theme';
 
 const COLOR_LERP_SPEED = 3;
@@ -49,10 +50,9 @@ export function useTheme() {
   useFrame((_state, delta) => {
     const { smoothedAudioData } = useAudioStore.getState();
     const { preset } = useThemeStore.getState();
+    const { reducedMotion } = useAccessibilityStore.getState();
     const { energy, bass, rms } = smoothedAudioData;
 
-    // When the preset changes externally, snap colorsRef to the new palette so
-    // the lerp starts from the correct base instead of the stale previous color.
     if (presetRef.current !== preset) {
       const newPalette = COLOR_PRESETS[preset];
       currentColorsRef.primary.copy(newPalette.primary);
@@ -64,14 +64,21 @@ export function useTheme() {
     const autoPreset = getTargetPresetByEnergy(energy, bass);
     const targetPalette = COLOR_PRESETS[autoPreset];
 
-    const lerpFactor = 1 - Math.exp(-COLOR_LERP_SPEED * delta);
-
-    currentColorsRef.primary.lerp(targetPalette.primary, lerpFactor);
-    currentColorsRef.secondary.lerp(targetPalette.secondary, lerpFactor);
-    currentColorsRef.accent.lerp(targetPalette.accent, lerpFactor);
+    if (reducedMotion) {
+      currentColorsRef.primary.copy(targetPalette.primary);
+      currentColorsRef.secondary.copy(targetPalette.secondary);
+      currentColorsRef.accent.copy(targetPalette.accent);
+    } else {
+      const lerpFactor = 1 - Math.exp(-COLOR_LERP_SPEED * delta);
+      currentColorsRef.primary.lerp(targetPalette.primary, lerpFactor);
+      currentColorsRef.secondary.lerp(targetPalette.secondary, lerpFactor);
+      currentColorsRef.accent.lerp(targetPalette.accent, lerpFactor);
+    }
 
     const targetBloom = MathUtils.lerp(BLOOM_MIN, BLOOM_MAX, rms);
-    bloomRef.current = MathUtils.damp(bloomRef.current, targetBloom, BLOOM_DAMP_SPEED, delta);
+    bloomRef.current = reducedMotion
+      ? targetBloom
+      : MathUtils.damp(bloomRef.current, targetBloom, BLOOM_DAMP_SPEED, delta);
     bloomIntensityRef.value = bloomRef.current;
   });
 }
