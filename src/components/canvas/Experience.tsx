@@ -4,6 +4,7 @@ import { OrbitControls } from '@react-three/drei';
 import { type PointLight } from 'three';
 import { useTheme, currentColorsRef } from '../../hooks/useTheme';
 import { useQualityManager } from '../../hooks/useQualityManager';
+import { useCameraShake } from '../../hooks/useCameraShake';
 import { Stage } from './Stage';
 
 /**
@@ -19,6 +20,7 @@ export function Experience() {
 
   useTheme();
   useQualityManager();
+  useCameraShake();
 
   useFrame(() => {
     if (primaryLightRef.current) {
