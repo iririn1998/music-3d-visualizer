@@ -25,12 +25,13 @@ export function AccessibilityPanel() {
         )}
 
         <div className="flex flex-col gap-3">
-          <label className="flex items-center justify-between">
-            <span className="text-xs text-white/70">Camera Shake</span>
+          <div className="flex items-center justify-between">
+            <span id="camera-shake-label" className="text-xs text-white/70">Camera Shake</span>
             <button
               type="button"
               role="switch"
               aria-checked={shakeEnabled}
+              aria-labelledby="camera-shake-label"
               onClick={() => setShakeEnabled(!shakeEnabled)}
               className={`relative h-5 w-9 rounded-full transition-colors duration-200
                 ${shakeEnabled ? 'bg-white/30' : 'bg-white/10'}`}
@@ -40,7 +41,7 @@ export function AccessibilityPanel() {
                   ${shakeEnabled ? 'translate-x-4' : 'translate-x-0'}`}
               />
             </button>
-          </label>
+          </div>
 
           {shakeEnabled && (
             <Slider
