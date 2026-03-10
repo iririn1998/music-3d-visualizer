@@ -30,11 +30,17 @@ describe('accessibilityStore', () => {
     expect(useAccessibilityStore.getState().shakeIntensity).toBe(0.8);
   });
 
-  it('clamps shakeIntensity to set value', () => {
+  it('clamps shakeIntensity to [0, 1]', () => {
     useAccessibilityStore.getState().setShakeIntensity(0);
     expect(useAccessibilityStore.getState().shakeIntensity).toBe(0);
 
     useAccessibilityStore.getState().setShakeIntensity(1);
+    expect(useAccessibilityStore.getState().shakeIntensity).toBe(1);
+
+    useAccessibilityStore.getState().setShakeIntensity(-0.1);
+    expect(useAccessibilityStore.getState().shakeIntensity).toBe(0);
+
+    useAccessibilityStore.getState().setShakeIntensity(1.5);
     expect(useAccessibilityStore.getState().shakeIntensity).toBe(1);
   });
 

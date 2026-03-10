@@ -16,6 +16,6 @@ export const useAccessibilityStore = create<AccessibilityStore>((set) => ({
   reducedMotion: false,
 
   setShakeEnabled: (shakeEnabled) => set({ shakeEnabled }),
-  setShakeIntensity: (shakeIntensity) => set({ shakeIntensity }),
+  setShakeIntensity: (intensity) => set({ shakeIntensity: Math.max(0, Math.min(1, intensity)) }),
   setReducedMotion: (reducedMotion) => set({ reducedMotion }),
 }));
