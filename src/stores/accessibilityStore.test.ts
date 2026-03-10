@@ -1,12 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { useAccessibilityStore } from './accessibilityStore';
-
-const mockMatchMedia = vi.fn(() => ({
-  matches: false,
-  addEventListener: vi.fn(),
-  removeEventListener: vi.fn(),
-}));
-vi.stubGlobal('matchMedia', mockMatchMedia);
 
 describe('accessibilityStore', () => {
   beforeEach(() => {
