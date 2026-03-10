@@ -39,7 +39,7 @@ export function PlayerControls({ onLoadFile, onStop }: PlayerControlsProps) {
 
       if (!isAudioFile(file)) {
         pushError({
-          message: `"${file.name}" は対応していない形式です。MP3, WAV, OGG, FLAC, AAC をお試しください。`,
+          message: `"${file.name}" は対応していない形式です。MP3, WAV, OGG, FLAC, AAC, M4A, WebM をお試しください。`,
           type: 'error',
           dismissible: true,
         });
@@ -61,7 +61,7 @@ export function PlayerControls({ onLoadFile, onStop }: PlayerControlsProps) {
 
       if (!isAudioFile(file)) {
         pushError({
-          message: `"${file.name}" は対応していない形式です。MP3, WAV, OGG, FLAC, AAC をお試しください。`,
+          message: `"${file.name}" は対応していない形式です。MP3, WAV, OGG, FLAC, AAC, M4A, WebM をお試しください。`,
           type: 'error',
           dismissible: true,
         });
@@ -105,7 +105,7 @@ export function PlayerControls({ onLoadFile, onStop }: PlayerControlsProps) {
           <span className="text-center text-xs text-white/50">
             クリックまたはドラッグ&amp;ドロップ
           </span>
-          <span className="text-[10px] text-white/30">MP3, WAV, OGG, FLAC, AAC</span>
+          <span className="text-[10px] text-white/30">MP3, WAV, OGG, FLAC, AAC, M4A, WebM</span>
         </div>
 
         <input
