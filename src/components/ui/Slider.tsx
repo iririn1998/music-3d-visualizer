@@ -8,15 +8,7 @@ interface SliderProps {
   formatValue?: (value: number) => string;
 }
 
-export function Slider({
-  label,
-  value,
-  min,
-  max,
-  step,
-  onChange,
-  formatValue,
-}: SliderProps) {
+export function Slider({ label, value, min, max, step, onChange, formatValue }: SliderProps) {
   const displayValue = formatValue ? formatValue(value) : value.toFixed(2);
 
   return (
