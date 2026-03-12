@@ -1,3 +1,5 @@
+import type { FC } from 'react';
+
 interface SliderProps {
   label: string;
   value: number;
@@ -8,7 +10,7 @@ interface SliderProps {
   formatValue?: (value: number) => string;
 }
 
-export function Slider({ label, value, min, max, step, onChange, formatValue }: SliderProps) {
+const Slider: FC<SliderProps> = ({ label, value, min, max, step, onChange, formatValue }) => {
   const displayValue = formatValue ? formatValue(value) : value.toFixed(2);
 
   return (
@@ -23,7 +25,7 @@ export function Slider({ label, value, min, max, step, onChange, formatValue }: 
         max={max}
         step={step}
         value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
+        onChange={(event) => onChange(Number(event.target.value))}
         className="h-1 w-full cursor-pointer appearance-none rounded-full bg-white/20
           [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3
           [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full
@@ -31,4 +33,6 @@ export function Slider({ label, value, min, max, step, onChange, formatValue }: 
       />
     </label>
   );
-}
+};
+
+export { Slider };

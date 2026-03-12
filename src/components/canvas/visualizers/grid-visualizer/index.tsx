@@ -1,16 +1,16 @@
-import { useMemo } from 'react';
+import { useMemo, type FC } from 'react';
 import { useFrame } from '@react-three/fiber';
 import {
-  ShaderMaterial,
   BoxGeometry,
-  InstancedBufferGeometry,
   InstancedBufferAttribute,
+  InstancedBufferGeometry,
+  ShaderMaterial,
 } from 'three';
-import { useAudioStore } from '../../../stores/audioStore';
-import { useQualityStore } from '../../../stores/qualityStore';
-import { currentColorsRef } from '../../../hooks/useTheme';
-import gridVertexShader from '../../../shaders/gridVertex.glsl?raw';
-import gridFragmentShader from '../../../shaders/gridFragment.glsl?raw';
+import { currentColorsRef } from '../../../../hooks/useTheme';
+import gridFragmentShader from '../../../../shaders/gridFragment.glsl?raw';
+import gridVertexShader from '../../../../shaders/gridVertex.glsl?raw';
+import { useAudioStore } from '../../../../stores/audioStore';
+import { useQualityStore } from '../../../../stores/qualityStore';
 
 const GRID_SPACING = 1.2;
 const BOX_WIDTH = 0.15;
@@ -22,19 +22,19 @@ const GRID_SIZE = {
   high: 50,
 } as const;
 
-function buildGridGeometry(gridSize: number) {
+const buildGridGeometry = (gridSize: number) => {
   const base = new BoxGeometry(BOX_WIDTH, BOX_HEIGHT, BOX_WIDTH);
-  const geo = new InstancedBufferGeometry();
-  geo.index = base.index;
-  geo.attributes.position = base.attributes.position;
-  geo.attributes.normal = base.attributes.normal;
+  const geometry = new InstancedBufferGeometry();
+  geometry.index = base.index;
+  geometry.attributes.position = base.attributes.position;
+  geometry.attributes.normal = base.attributes.normal;
 
   const count = gridSize * gridSize;
   const offsets = new Float32Array(count * 3);
   const half = (gridSize - 1) * GRID_SPACING * 0.5;
 
-  for (let i = 0; i < gridSize; i++) {
-    for (let j = 0; j < gridSize; j++) {
+  for (let i = 0; i < gridSize; i += 1) {
+    for (let j = 0; j < gridSize; j += 1) {
       const idx = (i * gridSize + j) * 3;
       offsets[idx] = i * GRID_SPACING - half;
       offsets[idx + 1] = 0;
@@ -42,11 +42,11 @@ function buildGridGeometry(gridSize: number) {
     }
   }
 
-  geo.setAttribute('instanceOffset', new InstancedBufferAttribute(offsets, 3));
-  geo.instanceCount = count;
+  geometry.setAttribute('instanceOffset', new InstancedBufferAttribute(offsets, 3));
+  geometry.instanceCount = count;
 
-  return geo;
-}
+  return geometry;
+};
 
 /**
  * "Digital Horizon" — サイバーグリッド床面ビジュアライザー。
@@ -55,7 +55,7 @@ function buildGridGeometry(gridSize: number) {
  * 中音域(mid)でグリッドが波形にうねり、
  * エネルギー(energy)で中心から外側へ放射状に光の波が広がる。
  */
-export function GridVisualizer() {
+const GridVisualizer: FC = () => {
   const geometryDetail = useQualityStore((s) => s.settings.geometryDetail);
 
   const gridSize = useMemo(() => {
@@ -106,4 +106,6 @@ export function GridVisualizer() {
       <mesh geometry={geometry} material={shaderMaterial} frustumCulled={false} />
     </group>
   );
-}
+};
+
+export { GridVisualizer };

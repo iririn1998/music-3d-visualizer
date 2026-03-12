@@ -1,10 +1,10 @@
-import { useRef } from 'react';
+import { useRef, type FC } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { EffectComposer, Bloom } from '@react-three/postprocessing';
+import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import type { BloomEffect } from 'postprocessing';
-import { useThemeStore } from '../../stores/themeStore';
-import { useQualityStore } from '../../stores/qualityStore';
-import { bloomIntensityRef } from '../../hooks/useTheme';
+import { bloomIntensityRef } from '../../../hooks/useTheme';
+import { useQualityStore } from '../../../stores/qualityStore';
+import { useThemeStore } from '../../../stores/themeStore';
 
 /**
  * シーン全体のポストプロセッシング。
@@ -12,7 +12,7 @@ import { bloomIntensityRef } from '../../hooks/useTheme';
  * Zustand 経由の React 再レンダーを発生させない。
  * 品質設定で bloom が無効な場合はレンダリングしない。
  */
-export function PostProcessing() {
+const PostProcessing: FC = () => {
   const bloomEffectRef = useRef<BloomEffect>(null);
   const bloomThreshold = useThemeStore((s) => s.bloomThreshold);
   const bloomEnabled = useQualityStore((s) => s.settings.bloomEnabled);
@@ -36,4 +36,6 @@ export function PostProcessing() {
       />
     </EffectComposer>
   );
-}
+};
+
+export { PostProcessing };

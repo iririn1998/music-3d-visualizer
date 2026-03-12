@@ -1,12 +1,12 @@
-import { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useRef, type FC } from 'react';
 import { OrbitControls } from '@react-three/drei';
-import { type PointLight } from 'three';
-import { useTheme, currentColorsRef } from '../../hooks/useTheme';
-import { useQualityManager } from '../../hooks/useQualityManager';
-import { useCameraShake } from '../../hooks/useCameraShake';
-import { useModeReset } from '../../hooks/useModeReset';
-import { Stage } from './Stage';
+import { useFrame } from '@react-three/fiber';
+import type { PointLight } from 'three';
+import { useCameraShake } from '../../../hooks/useCameraShake';
+import { useModeReset } from '../../../hooks/useModeReset';
+import { currentColorsRef, useTheme } from '../../../hooks/useTheme';
+import { useQualityManager } from '../../../hooks/useQualityManager';
+import { Stage } from '../stage';
 
 /**
  * R3F シーン内の基本構成要素（照明・カメラ制御・ビジュアライザー）。
@@ -15,7 +15,7 @@ import { Stage } from './Stage';
  * ライト色は useFrame 内で currentColorsRef から直接書き込み、
  * Zustand 経由の React 再レンダーを発生させない。
  */
-export function Experience() {
+const Experience: FC = () => {
   const primaryLightRef = useRef<PointLight>(null);
   const secondaryLightRef = useRef<PointLight>(null);
 
@@ -44,4 +44,6 @@ export function Experience() {
       <Stage />
     </>
   );
-}
+};
+
+export { Experience };

@@ -1,17 +1,17 @@
-import { useRef, useMemo } from 'react';
+import { useMemo, useRef, type FC } from 'react';
 import { useFrame } from '@react-three/fiber';
 import {
-  type Points,
-  ShaderMaterial,
+  AdditiveBlending,
   BufferGeometry,
   Float32BufferAttribute,
-  AdditiveBlending,
+  type Points,
+  ShaderMaterial,
 } from 'three';
-import { useAudioStore } from '../../../stores/audioStore';
-import { useQualityStore } from '../../../stores/qualityStore';
-import { currentColorsRef } from '../../../hooks/useTheme';
-import particleVertexShader from '../../../shaders/particleVertex.glsl?raw';
-import particleFragmentShader from '../../../shaders/particleFragment.glsl?raw';
+import { currentColorsRef } from '../../../../hooks/useTheme';
+import particleFragmentShader from '../../../../shaders/particleFragment.glsl?raw';
+import particleVertexShader from '../../../../shaders/particleVertex.glsl?raw';
+import { useAudioStore } from '../../../../stores/audioStore';
+import { useQualityStore } from '../../../../stores/qualityStore';
 
 const MIN_RADIUS = 0.5;
 const RADIUS_RANGE = 6.0;
@@ -20,15 +20,15 @@ const SPEED_RANGE = 1.0;
 const DEFAULT_PARTICLE_SIZE = 3.0;
 const ROTATION_SPEED = 0.001;
 
-function buildParticleGeometry(count: number) {
-  const geo = new BufferGeometry();
+const buildParticleGeometry = (count: number) => {
+  const geometry = new BufferGeometry();
   const positions = new Float32Array(count * 3);
   const angles = new Float32Array(count);
   const radii = new Float32Array(count);
   const speeds = new Float32Array(count);
   const phases = new Float32Array(count);
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < count; i += 1) {
     positions[i * 3] = 0;
     positions[i * 3 + 1] = 0;
     positions[i * 3 + 2] = 0;
@@ -39,14 +39,14 @@ function buildParticleGeometry(count: number) {
     phases[i] = Math.random() * Math.PI * 2;
   }
 
-  geo.setAttribute('position', new Float32BufferAttribute(positions, 3));
-  geo.setAttribute('aAngle', new Float32BufferAttribute(angles, 1));
-  geo.setAttribute('aRadius', new Float32BufferAttribute(radii, 1));
-  geo.setAttribute('aSpeed', new Float32BufferAttribute(speeds, 1));
-  geo.setAttribute('aPhase', new Float32BufferAttribute(phases, 1));
+  geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('aAngle', new Float32BufferAttribute(angles, 1));
+  geometry.setAttribute('aRadius', new Float32BufferAttribute(radii, 1));
+  geometry.setAttribute('aSpeed', new Float32BufferAttribute(speeds, 1));
+  geometry.setAttribute('aPhase', new Float32BufferAttribute(phases, 1));
 
-  return geo;
-}
+  return geometry;
+};
 
 /**
  * "Stardust Vortex" — パーティクル渦巻きビジュアライザー。
@@ -55,7 +55,7 @@ function buildParticleGeometry(count: number) {
  * 音量(rms)で回転速度と拡散範囲が変化し、
  * 低音のピーク(bass)で粒子が外側へ弾け飛ぶ。
  */
-export function ParticleVisualizer() {
+const ParticleVisualizer: FC = () => {
   const pointsRef = useRef<Points>(null);
   const particleCount = useQualityStore((s) => s.settings.particleCount);
 
@@ -101,4 +101,6 @@ export function ParticleVisualizer() {
   return (
     <points ref={pointsRef} geometry={geometry} material={shaderMaterial} frustumCulled={false} />
   );
-}
+};
+
+export { ParticleVisualizer };

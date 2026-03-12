@@ -1,8 +1,15 @@
-import { useRef, useCallback } from 'react';
-import { Upload, Play, Square, Music } from 'lucide-react';
-import { useAudioStore } from '../../stores/audioStore';
-import { useErrorStore } from '../../stores/errorStore';
-import { GlassPanel } from './GlassPanel';
+import {
+  useCallback,
+  useRef,
+  type ChangeEvent,
+  type DragEvent,
+  type FC,
+  type KeyboardEvent,
+} from 'react';
+import { Music, Play, Square, Upload } from 'lucide-react';
+import { useAudioStore } from '../../../stores/audioStore';
+import { useErrorStore } from '../../../stores/errorStore';
+import { GlassPanel } from '../glass-panel';
 
 const SUPPORTED_TYPES = new Set([
   'audio/mpeg',
@@ -17,24 +24,24 @@ const SUPPORTED_TYPES = new Set([
 
 const SUPPORTED_EXTENSIONS = /\.(mp3|wav|ogg|flac|aac|m4a|weba|webm|mp4)$/i;
 
-function isAudioFile(file: File): boolean {
+const isAudioFile = (file: File): boolean => {
   if (SUPPORTED_TYPES.has(file.type)) return true;
   return SUPPORTED_EXTENSIONS.test(file.name);
-}
+};
 
 interface PlayerControlsProps {
   onLoadFile: (file: File) => void;
   onStop: () => void;
 }
 
-export function PlayerControls({ onLoadFile, onStop }: PlayerControlsProps) {
+const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onStop }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const playbackState = useAudioStore((s) => s.playbackState);
   const pushError = useErrorStore((s) => s.pushError);
 
   const handleFileChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
       if (!file) return;
 
       if (!isAudioFile(file)) {
@@ -54,9 +61,9 @@ export function PlayerControls({ onLoadFile, onStop }: PlayerControlsProps) {
   );
 
   const handleDrop = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      const file = e.dataTransfer.files[0];
+    (event: DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      const file = event.dataTransfer.files[0];
       if (!file) return;
 
       if (!isAudioFile(file)) {
@@ -73,8 +80,14 @@ export function PlayerControls({ onLoadFile, onStop }: PlayerControlsProps) {
     [onLoadFile, pushError],
   );
 
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
+  const handleDragOver = useCallback((event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  }, []);
+
+  const handleKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      fileInputRef.current?.click();
+    }
   }, []);
 
   const isPlaying = playbackState === 'playing';
@@ -94,9 +107,7 @@ export function PlayerControls({ onLoadFile, onStop }: PlayerControlsProps) {
             border border-dashed border-white/20 px-4 py-5
             transition-colors duration-200 hover:border-white/40 hover:bg-white/5"
           onClick={() => fileInputRef.current?.click()}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') fileInputRef.current?.click();
-          }}
+          onKeyDown={handleKeyDown}
           role="button"
           tabIndex={0}
           aria-label="音声ファイルをアップロード"
@@ -144,4 +155,6 @@ export function PlayerControls({ onLoadFile, onStop }: PlayerControlsProps) {
       </GlassPanel>
     </div>
   );
-}
+};
+
+export { PlayerControls };

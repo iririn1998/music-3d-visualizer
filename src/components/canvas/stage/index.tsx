@@ -1,14 +1,15 @@
-import { useAudioStore } from '../../stores/audioStore';
-import { CoreVisualizer } from './visualizers/CoreVisualizer';
-import { GridVisualizer } from './visualizers/GridVisualizer';
-import { ParticleVisualizer } from './visualizers/ParticleVisualizer';
+import type { FC } from 'react';
+import { useAudioStore } from '../../../stores/audioStore';
+import { CoreVisualizer } from '../visualizers/core-visualizer';
+import { GridVisualizer } from '../visualizers/grid-visualizer';
+import { ParticleVisualizer } from '../visualizers/particle-visualizer';
 
 /**
  * ビジュアライザーモードに応じた 3D オブジェクトを切り替えるディスパッチャー。
  * モード変更時に対応するビジュアライザーコンポーネントがアンマウント→再マウントされることで、
  * そのビジュアライザー固有の 3D オブジェクトや内部状態が自然にリセットされる。
  */
-export function Stage() {
+const Stage: FC = () => {
   const mode = useAudioStore((s) => s.mode);
 
   switch (mode) {
@@ -24,4 +25,6 @@ export function Stage() {
       return null;
     }
   }
-}
+};
+
+export { Stage };

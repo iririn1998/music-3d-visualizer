@@ -1,6 +1,6 @@
-import { VisualizerCanvas } from './components/canvas/VisualizerCanvas';
-import { Overlay } from './components/ui/Overlay';
 import { useLocalAudio } from './audio/useLocalAudio';
+import { VisualizerCanvas } from './components/canvas/visualizer-canvas';
+import { Overlay } from './components/ui/overlay';
 import { useReducedMotionSync } from './hooks/useReducedMotionSync';
 
 const App = () => {
@@ -13,6 +13,6 @@ const App = () => {
       <Overlay onLoadFile={loadFile} onStop={stop} />
     </div>
   );
-}
+};
 
 export default App;
