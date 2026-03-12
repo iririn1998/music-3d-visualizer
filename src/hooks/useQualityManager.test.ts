@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
-import { useQualityManager } from './useQualityManager';
-import { useQualityStore } from '../stores/qualityStore';
+import { useQualityManager } from '@/hooks/useQualityManager';
+import { useQualityStore } from '@/stores/qualityStore';
 
 // ---------------------------------------------------------------------------
 // Constants mirrored from the hook (kept in sync manually)

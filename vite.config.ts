@@ -17,6 +17,11 @@ export default defineConfig({
       plugins: [['babel-plugin-react-compiler']]
     }
   })],
+  resolve: {
+    alias: {
+      '@': path.resolve(dirname, 'src'),
+    }
+  },
   test: {
     globals: true,
     environment: 'happy-dom',

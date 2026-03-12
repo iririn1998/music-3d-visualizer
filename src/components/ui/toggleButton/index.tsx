@@ -1,12 +1,14 @@
+import type { FC, ReactNode } from 'react';
+
 interface ToggleButtonProps {
   active: boolean;
   onClick: () => void;
-  children: React.ReactNode;
+  children: ReactNode;
   title?: string;
   ariaLabel?: string;
 }
 
-export function ToggleButton({ active, onClick, children, title, ariaLabel }: ToggleButtonProps) {
+const ToggleButton: FC<ToggleButtonProps> = ({ active, onClick, children, title, ariaLabel }) => {
   return (
     <button
       type="button"
@@ -24,4 +26,6 @@ export function ToggleButton({ active, onClick, children, title, ariaLabel }: To
       {children}
     </button>
   );
-}
+};
+
+export { ToggleButton };

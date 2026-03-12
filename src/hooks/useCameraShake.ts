@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Vector3 } from 'three';
-import { useAudioStore } from '../stores/audioStore';
-import { useAccessibilityStore } from '../stores/accessibilityStore';
+import { useAudioStore } from '@/stores/audioStore';
+import { useAccessibilityStore } from '@/stores/accessibilityStore';
 
 const SHAKE_DECAY = 8;
 const MAX_OFFSET = 0.15;

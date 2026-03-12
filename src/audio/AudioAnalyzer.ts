@@ -1,4 +1,4 @@
-import { type AudioData, DEFAULT_AUDIO_DATA } from '../types/audio';
+import { type AudioData, DEFAULT_AUDIO_DATA } from '@/types/audio';
 
 const FFT_SIZE = 2048;
 

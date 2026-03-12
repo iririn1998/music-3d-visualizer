@@ -1,11 +1,11 @@
-import { useRef, useMemo } from 'react';
+import { useMemo, useRef, type FC } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { type Mesh, ShaderMaterial, IcosahedronGeometry } from 'three';
-import { useAudioStore } from '../../../stores/audioStore';
-import { useQualityStore } from '../../../stores/qualityStore';
-import { currentColorsRef } from '../../../hooks/useTheme';
-import coreVertexShader from '../../../shaders/coreVertex.glsl?raw';
-import coreFragmentShader from '../../../shaders/coreFragment.glsl?raw';
+import { IcosahedronGeometry, type Mesh, ShaderMaterial } from 'three';
+import { currentColorsRef } from '@/hooks/useTheme';
+import coreFragmentShader from '@/shaders/coreFragment.glsl?raw';
+import coreVertexShader from '@/shaders/coreVertex.glsl?raw';
+import { useAudioStore } from '@/stores/audioStore';
+import { useQualityStore } from '@/stores/qualityStore';
 
 const GEOMETRY_DETAIL = {
   low: 2,
@@ -23,7 +23,7 @@ const ROTATION_SPEED_X = 0.001;
  * 低音(bass)で球体がスケール膨張、高音(treble)で表面にスパイクが発生する。
  * Noise関数で有機的な変形を実現。
  */
-export function CoreVisualizer() {
+const CoreVisualizer: FC = () => {
   const meshRef = useRef<Mesh>(null);
   const geometryDetail = useQualityStore((s) => s.settings.geometryDetail);
 
@@ -79,4 +79,6 @@ export function CoreVisualizer() {
   });
 
   return <mesh ref={meshRef} geometry={geometry} material={shaderMaterial} frustumCulled={false} />;
-}
+};
+
+export { CoreVisualizer };

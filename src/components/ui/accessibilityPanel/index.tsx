@@ -1,9 +1,10 @@
+import type { FC } from 'react';
 import { Accessibility } from 'lucide-react';
-import { useAccessibilityStore } from '../../stores/accessibilityStore';
-import { GlassPanel } from './GlassPanel';
-import { Slider } from './Slider';
+import { useAccessibilityStore } from '@/stores/accessibilityStore';
+import { GlassPanel } from '@/components/ui/glassPanel';
+import { Slider } from '@/components/ui/slider';
 
-export function AccessibilityPanel() {
+const AccessibilityPanel: FC = () => {
   const shakeEnabled = useAccessibilityStore((s) => s.shakeEnabled);
   const setShakeEnabled = useAccessibilityStore((s) => s.setShakeEnabled);
   const shakeIntensity = useAccessibilityStore((s) => s.shakeIntensity);
@@ -53,11 +54,13 @@ export function AccessibilityPanel() {
               max={1}
               step={0.05}
               onChange={setShakeIntensity}
-              formatValue={(v) => `${(v * 100).toFixed(0)}%`}
+              formatValue={(value) => `${(value * 100).toFixed(0)}%`}
             />
           )}
         </div>
       </GlassPanel>
     </div>
   );
-}
+};
+
+export { AccessibilityPanel };

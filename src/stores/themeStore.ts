@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { type ColorPreset } from '../types/theme';
+import { type ColorPreset } from '@/types/theme';
 
 interface ThemeStore {
   preset: ColorPreset;

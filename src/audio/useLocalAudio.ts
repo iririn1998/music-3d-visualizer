@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
-import { useAudioStore } from '../stores/audioStore';
-import { dampAudioData } from '../utils/smoothing';
-import { AudioAnalyzer } from './AudioAnalyzer';
+import { useAudioStore } from '@/stores/audioStore';
+import { dampAudioData } from '@/utils/smoothing';
+import { AudioAnalyzer } from '@/audio/AudioAnalyzer';
 
 const SMOOTHING_LAMBDA = 5;
 

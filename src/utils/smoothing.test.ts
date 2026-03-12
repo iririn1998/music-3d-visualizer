@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { dampAudioData, dampValue } from './smoothing';
-import { DEFAULT_AUDIO_DATA } from '../types/audio';
+import { dampAudioData, dampValue } from '@/utils/smoothing';
+import { DEFAULT_AUDIO_DATA } from '@/types/audio';
 
 describe('dampAudioData', () => {
   it('returns current values unchanged when delta is 0', () => {

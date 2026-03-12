@@ -1,7 +1,8 @@
-import { X, AlertTriangle, AlertCircle } from 'lucide-react';
-import { useErrorStore } from '../../stores/errorStore';
+import type { FC } from 'react';
+import { AlertCircle, AlertTriangle, X } from 'lucide-react';
+import { useErrorStore } from '@/stores/errorStore';
 
-export function ErrorFeedback() {
+const ErrorFeedback: FC = () => {
   const errors = useErrorStore((s) => s.errors);
   const dismissError = useErrorStore((s) => s.dismissError);
 
@@ -40,4 +41,6 @@ export function ErrorFeedback() {
       ))}
     </div>
   );
-}
+};
+
+export { ErrorFeedback };

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAccessibilityStore } from '../stores/accessibilityStore';
+import { useAccessibilityStore } from '@/stores/accessibilityStore';
 
 /**
  * prefers-reduced-motion メディアクエリの変化を監視し、
