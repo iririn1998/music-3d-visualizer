@@ -3,7 +3,7 @@ import { Overlay } from './components/ui/Overlay';
 import { useLocalAudio } from './audio/useLocalAudio';
 import { useReducedMotionSync } from './hooks/useReducedMotionSync';
 
-function App() {
+const App = () => {
   const { loadFile, stop } = useLocalAudio();
   useReducedMotionSync();
 
