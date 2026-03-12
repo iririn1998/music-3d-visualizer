@@ -4,9 +4,9 @@ import { useAudioStore } from '../../../stores/audioStore';
 import { useThemeStore } from '../../../stores/themeStore';
 import type { VisualizerMode } from '../../../types/audio';
 import type { ColorPreset } from '../../../types/theme';
-import { GlassPanel } from '../glass-panel';
+import { GlassPanel } from '../glassPanel';
 import { Slider } from '../slider';
-import { ToggleButton } from '../toggle-button';
+import { ToggleButton } from '../toggleButton';
 
 const MODE_OPTIONS: { value: VisualizerMode; label: string }[] = [
   { value: 'core', label: 'Pulsing Core' },

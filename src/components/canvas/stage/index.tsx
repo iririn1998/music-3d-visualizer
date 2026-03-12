@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import { useAudioStore } from '../../../stores/audioStore';
-import { CoreVisualizer } from '../visualizers/core-visualizer';
-import { GridVisualizer } from '../visualizers/grid-visualizer';
-import { ParticleVisualizer } from '../visualizers/particle-visualizer';
+import { CoreVisualizer } from '../visualizers/coreVisualizer';
+import { GridVisualizer } from '../visualizers/gridVisualizer';
+import { ParticleVisualizer } from '../visualizers/particleVisualizer';
 
 /**
  * ビジュアライザーモードに応じた 3D オブジェクトを切り替えるディスパッチャー。

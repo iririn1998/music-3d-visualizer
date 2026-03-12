@@ -1,5 +1,5 @@
 import { useLocalAudio } from './audio/useLocalAudio';
-import { VisualizerCanvas } from './components/canvas/visualizer-canvas';
+import { VisualizerCanvas } from './components/canvas/visualizerCanvas';
 import { Overlay } from './components/ui/overlay';
 import { useReducedMotionSync } from './hooks/useReducedMotionSync';
 

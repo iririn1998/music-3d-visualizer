@@ -9,7 +9,7 @@ import {
 import { Music, Play, Square, Upload } from 'lucide-react';
 import { useAudioStore } from '../../../stores/audioStore';
 import { useErrorStore } from '../../../stores/errorStore';
-import { GlassPanel } from '../glass-panel';
+import { GlassPanel } from '../glassPanel';
 
 const SUPPORTED_TYPES = new Set([
   'audio/mpeg',

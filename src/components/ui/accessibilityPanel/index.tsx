@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Accessibility } from 'lucide-react';
 import { useAccessibilityStore } from '../../../stores/accessibilityStore';
-import { GlassPanel } from '../glass-panel';
+import { GlassPanel } from '../glassPanel';
 import { Slider } from '../slider';
 
 const AccessibilityPanel: FC = () => {
