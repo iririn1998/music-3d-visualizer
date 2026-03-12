@@ -2,11 +2,11 @@ import { useRef, type FC } from 'react';
 import { OrbitControls } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import type { PointLight } from 'three';
-import { useCameraShake } from '../../../hooks/useCameraShake';
-import { useModeReset } from '../../../hooks/useModeReset';
-import { currentColorsRef, useTheme } from '../../../hooks/useTheme';
-import { useQualityManager } from '../../../hooks/useQualityManager';
-import { Stage } from '../stage';
+import { useCameraShake } from '@/hooks/useCameraShake';
+import { useModeReset } from '@/hooks/useModeReset';
+import { currentColorsRef, useTheme } from '@/hooks/useTheme';
+import { useQualityManager } from '@/hooks/useQualityManager';
+import { Stage } from '@/components/canvas/stage';
 
 /**
  * R3F シーン内の基本構成要素（照明・カメラ制御・ビジュアライザー）。

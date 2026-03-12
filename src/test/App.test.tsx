@@ -23,7 +23,7 @@ vi.mock('@react-three/postprocessing', () => ({
   Bloom: () => null,
 }));
 
-import App from '../App';
+import App from '@/App';
 
 describe('App', () => {
   it('renders the visualizer canvas container', () => {

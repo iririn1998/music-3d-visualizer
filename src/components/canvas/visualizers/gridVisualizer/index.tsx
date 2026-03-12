@@ -6,11 +6,11 @@ import {
   InstancedBufferGeometry,
   ShaderMaterial,
 } from 'three';
-import { currentColorsRef } from '../../../../hooks/useTheme';
-import gridFragmentShader from '../../../../shaders/gridFragment.glsl?raw';
-import gridVertexShader from '../../../../shaders/gridVertex.glsl?raw';
-import { useAudioStore } from '../../../../stores/audioStore';
-import { useQualityStore } from '../../../../stores/qualityStore';
+import { currentColorsRef } from '@/hooks/useTheme';
+import gridFragmentShader from '@/shaders/gridFragment.glsl?raw';
+import gridVertexShader from '@/shaders/gridVertex.glsl?raw';
+import { useAudioStore } from '@/stores/audioStore';
+import { useQualityStore } from '@/stores/qualityStore';
 
 const GRID_SPACING = 1.2;
 const BOX_WIDTH = 0.15;

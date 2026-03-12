@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { useQualityStore } from '../../../stores/qualityStore';
-import { Experience } from '../experience';
-import { PostProcessing } from '../postProcessing';
+import { useQualityStore } from '@/stores/qualityStore';
+import { Experience } from '@/components/canvas/experience';
+import { PostProcessing } from '@/components/canvas/postProcessing';
 
 /**
  * Three.js 3D キャンバスのルートコンポーネント。

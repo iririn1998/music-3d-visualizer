@@ -14,8 +14,8 @@ const { mockMql, mockMatchMedia } = vi.hoisted(() => {
 
 vi.stubGlobal('matchMedia', mockMatchMedia);
 
-import { useReducedMotionSync } from './useReducedMotionSync';
-import { useAccessibilityStore } from '../stores/accessibilityStore';
+import { useReducedMotionSync } from '@/hooks/useReducedMotionSync';
+import { useAccessibilityStore } from '@/stores/accessibilityStore';
 
 describe('useReducedMotionSync', () => {
   beforeEach(() => {

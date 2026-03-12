@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import { Accessibility } from 'lucide-react';
-import { useAccessibilityStore } from '../../../stores/accessibilityStore';
-import { GlassPanel } from '../glassPanel';
-import { Slider } from '../slider';
+import { useAccessibilityStore } from '@/stores/accessibilityStore';
+import { GlassPanel } from '@/components/ui/glassPanel';
+import { Slider } from '@/components/ui/slider';
 
 const AccessibilityPanel: FC = () => {
   const shakeEnabled = useAccessibilityStore((s) => s.shakeEnabled);

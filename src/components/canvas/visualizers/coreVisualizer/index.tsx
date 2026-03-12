@@ -1,11 +1,11 @@
 import { useMemo, useRef, type FC } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { IcosahedronGeometry, type Mesh, ShaderMaterial } from 'three';
-import { currentColorsRef } from '../../../../hooks/useTheme';
-import coreFragmentShader from '../../../../shaders/coreFragment.glsl?raw';
-import coreVertexShader from '../../../../shaders/coreVertex.glsl?raw';
-import { useAudioStore } from '../../../../stores/audioStore';
-import { useQualityStore } from '../../../../stores/qualityStore';
+import { currentColorsRef } from '@/hooks/useTheme';
+import coreFragmentShader from '@/shaders/coreFragment.glsl?raw';
+import coreVertexShader from '@/shaders/coreVertex.glsl?raw';
+import { useAudioStore } from '@/stores/audioStore';
+import { useQualityStore } from '@/stores/qualityStore';
 
 const GEOMETRY_DETAIL = {
   low: 2,

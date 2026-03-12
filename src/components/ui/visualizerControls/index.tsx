@@ -1,12 +1,12 @@
 import { useState, type CSSProperties, type FC } from 'react';
 import { ChevronDown, ChevronUp, Settings } from 'lucide-react';
-import { useAudioStore } from '../../../stores/audioStore';
-import { useThemeStore } from '../../../stores/themeStore';
-import type { VisualizerMode } from '../../../types/audio';
-import type { ColorPreset } from '../../../types/theme';
-import { GlassPanel } from '../glassPanel';
-import { Slider } from '../slider';
-import { ToggleButton } from '../toggleButton';
+import { useAudioStore } from '@/stores/audioStore';
+import { useThemeStore } from '@/stores/themeStore';
+import type { VisualizerMode } from '@/types/audio';
+import type { ColorPreset } from '@/types/theme';
+import { GlassPanel } from '@/components/ui/glassPanel';
+import { Slider } from '@/components/ui/slider';
+import { ToggleButton } from '@/components/ui/toggleButton';
 
 const MODE_OPTIONS: { value: VisualizerMode; label: string }[] = [
   { value: 'core', label: 'Pulsing Core' },

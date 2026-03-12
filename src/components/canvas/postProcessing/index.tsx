@@ -2,9 +2,9 @@ import { useRef, type FC } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import type { BloomEffect } from 'postprocessing';
-import { bloomIntensityRef } from '../../../hooks/useTheme';
-import { useQualityStore } from '../../../stores/qualityStore';
-import { useThemeStore } from '../../../stores/themeStore';
+import { bloomIntensityRef } from '@/hooks/useTheme';
+import { useQualityStore } from '@/stores/qualityStore';
+import { useThemeStore } from '@/stores/themeStore';
 
 /**
  * シーン全体のポストプロセッシング。

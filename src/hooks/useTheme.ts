@@ -1,10 +1,10 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { MathUtils } from 'three';
-import { useAudioStore } from '../stores/audioStore';
-import { useThemeStore } from '../stores/themeStore';
-import { useAccessibilityStore } from '../stores/accessibilityStore';
-import { COLOR_PRESETS, type ColorPalette, type ColorPreset } from '../types/theme';
+import { useAudioStore } from '@/stores/audioStore';
+import { useThemeStore } from '@/stores/themeStore';
+import { useAccessibilityStore } from '@/stores/accessibilityStore';
+import { COLOR_PRESETS, type ColorPalette, type ColorPreset } from '@/types/theme';
 
 const COLOR_LERP_SPEED = 3;
 const BLOOM_DAMP_SPEED = 5;

@@ -1,9 +1,9 @@
 import { useState, type FC } from 'react';
 import { Menu, X } from 'lucide-react';
-import { AccessibilityPanel } from '../accessibilityPanel';
-import { ErrorFeedback } from '../errorFeedback';
-import { PlayerControls } from '../playerControls';
-import { VisualizerControls } from '../visualizerControls';
+import { AccessibilityPanel } from '@/components/ui/accessibilityPanel';
+import { ErrorFeedback } from '@/components/ui/errorFeedback';
+import { PlayerControls } from '@/components/ui/playerControls';
+import { VisualizerControls } from '@/components/ui/visualizerControls';
 
 interface OverlayProps {
   onLoadFile: (file: File) => void;

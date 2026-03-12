@@ -1,7 +1,7 @@
-import { useLocalAudio } from './audio/useLocalAudio';
-import { VisualizerCanvas } from './components/canvas/visualizerCanvas';
-import { Overlay } from './components/ui/overlay';
-import { useReducedMotionSync } from './hooks/useReducedMotionSync';
+import { useLocalAudio } from '@/audio/useLocalAudio';
+import { VisualizerCanvas } from '@/components/canvas/visualizerCanvas';
+import { Overlay } from '@/components/ui/overlay';
+import { useReducedMotionSync } from '@/hooks/useReducedMotionSync';
 
 const App = () => {
   const { loadFile, stop } = useLocalAudio();

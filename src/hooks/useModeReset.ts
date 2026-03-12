@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useThree } from '@react-three/fiber';
 import { Vector3 } from 'three';
-import { useAudioStore } from '../stores/audioStore';
+import { useAudioStore } from '@/stores/audioStore';
 
 const DEFAULT_CAMERA_POSITION = new Vector3(0, 0, 6);
 

@@ -1,5 +1,5 @@
 import { MathUtils } from 'three';
-import { type AudioData } from '../types/audio';
+import { type AudioData } from '@/types/audio';
 
 /**
  * THREE.MathUtils.damp() を用いて AudioData の各値を滑らかに補間する。

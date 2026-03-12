@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { AlertCircle, AlertTriangle, X } from 'lucide-react';
-import { useErrorStore } from '../../../stores/errorStore';
+import { useErrorStore } from '@/stores/errorStore';
 
 const ErrorFeedback: FC = () => {
   const errors = useErrorStore((s) => s.errors);

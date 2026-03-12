@@ -4,7 +4,7 @@ import {
   type PlaybackState,
   type VisualizerMode,
   DEFAULT_AUDIO_DATA,
-} from '../types/audio';
+} from '@/types/audio';
 
 interface AudioStore {
   audioData: AudioData;

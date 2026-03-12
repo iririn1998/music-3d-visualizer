@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useQualityStore } from '../stores/qualityStore';
-import { type QualityLevel } from '../types/quality';
+import { useQualityStore } from '@/stores/qualityStore';
+import { type QualityLevel } from '@/types/quality';
 
 const FPS_SAMPLE_INTERVAL = 1.0;
 

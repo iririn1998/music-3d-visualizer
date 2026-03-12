@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { type QualityLevel, type QualitySettings, QUALITY_PRESETS } from '../types/quality';
+import { type QualityLevel, type QualitySettings, QUALITY_PRESETS } from '@/types/quality';
 
 interface QualityStore {
   settings: QualitySettings;

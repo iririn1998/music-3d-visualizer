@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { useErrorStore } from './errorStore';
+import { useErrorStore } from '@/stores/errorStore';
 
 describe('errorStore', () => {
   beforeEach(() => {

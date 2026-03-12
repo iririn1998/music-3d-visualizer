@@ -7,9 +7,9 @@ import {
   type KeyboardEvent,
 } from 'react';
 import { Music, Play, Square, Upload } from 'lucide-react';
-import { useAudioStore } from '../../../stores/audioStore';
-import { useErrorStore } from '../../../stores/errorStore';
-import { GlassPanel } from '../glassPanel';
+import { useAudioStore } from '@/stores/audioStore';
+import { useErrorStore } from '@/stores/errorStore';
+import { GlassPanel } from '@/components/ui/glassPanel';
 
 const SUPPORTED_TYPES = new Set([
   'audio/mpeg',

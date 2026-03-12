@@ -7,11 +7,11 @@ import {
   type Points,
   ShaderMaterial,
 } from 'three';
-import { currentColorsRef } from '../../../../hooks/useTheme';
-import particleFragmentShader from '../../../../shaders/particleFragment.glsl?raw';
-import particleVertexShader from '../../../../shaders/particleVertex.glsl?raw';
-import { useAudioStore } from '../../../../stores/audioStore';
-import { useQualityStore } from '../../../../stores/qualityStore';
+import { currentColorsRef } from '@/hooks/useTheme';
+import particleFragmentShader from '@/shaders/particleFragment.glsl?raw';
+import particleVertexShader from '@/shaders/particleVertex.glsl?raw';
+import { useAudioStore } from '@/stores/audioStore';
+import { useQualityStore } from '@/stores/qualityStore';
 
 const MIN_RADIUS = 0.5;
 const RADIUS_RANGE = 6.0;

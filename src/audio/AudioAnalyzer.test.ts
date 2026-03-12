@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { AudioAnalyzer } from './AudioAnalyzer';
+import { AudioAnalyzer } from '@/audio/AudioAnalyzer';
 
 // Frequency band boundaries, mirroring the constants in AudioAnalyzer.ts
 const BASS_MAX_HZ = 250;
