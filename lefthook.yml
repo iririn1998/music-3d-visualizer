@@ -2,6 +2,8 @@ pre-commit:
   parallel: true
   commands:
     lint:
-      run: npx oxlint --react-plugin .
+      glob: "**/*.{js,jsx,ts,tsx}"
+      run: npx oxlint --react-plugin {staged_files}
     format:
-      run: npx oxfmt --check src
+      glob: "**/*.{js,jsx,ts,tsx}"
+      run: npx oxfmt --write {staged_files} && git add {staged_files}
