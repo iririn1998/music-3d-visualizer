@@ -1,0 +1,7 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      run: npx oxlint --react-plugin .
+    format:
+      run: npx oxfmt --check src
