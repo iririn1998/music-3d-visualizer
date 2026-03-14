@@ -6,8 +6,8 @@ import { useThemeStore } from '@/stores/themeStore';
 import type { VisualizerMode } from '@/types/audio';
 import type { ColorPreset } from '@/types/theme';
 import { GlassPanel } from '@/components/ui/GlassPanel';
-import { Slider } from '@/components/ui/slider';
-import { ToggleButton } from '@/components/ui/toggleButton';
+import { Slider } from '@/components/ui/Slider';
+import { ToggleButton } from '@/components/ui/ToggleButton';
 import styles from './index.module.css';
 
 const MODE_OPTIONS: { value: VisualizerMode; label: string }[] = [

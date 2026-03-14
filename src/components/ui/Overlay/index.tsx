@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import { useState, type FC } from 'react';
 import { Menu, X } from 'lucide-react';
-import { AccessibilityPanel } from '@/components/ui/accessibilityPanel';
-import { ErrorFeedback } from '@/components/ui/errorFeedback';
-import { PlayerControls } from '@/components/ui/playerControls';
-import { VisualizerControls } from '@/components/ui/visualizerControls';
+import { AccessibilityPanel } from '@/components/ui/AccessibilityPanel';
+import { ErrorFeedback } from '@/components/ui/ErrorFeedback';
+import { PlayerControls } from '@/components/ui/PlayerControls';
+import { VisualizerControls } from '@/components/ui/VisualizerControls';
 import styles from './index.module.css';
 
 type OverlayProps = {

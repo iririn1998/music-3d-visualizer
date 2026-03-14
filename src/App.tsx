@@ -1,5 +1,5 @@
 import { VisualizerCanvas } from '@/components/canvas/visualizerCanvas';
-import { Overlay } from '@/components/ui/overlay';
+import { Overlay } from '@/components/ui/Overlay';
 import { useLocalAudio } from '@/audio/useLocalAudio';
 import { useReducedMotionSync } from '@/hooks/useReducedMotionSync';
 
