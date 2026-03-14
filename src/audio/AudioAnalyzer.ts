@@ -137,7 +137,7 @@ export class AudioAnalyzer {
         }
       }
       try {
-        (this.source as unknown as AudioNode).disconnect();
+        this.source.disconnect();
       } catch {
         // already disconnected
       }
