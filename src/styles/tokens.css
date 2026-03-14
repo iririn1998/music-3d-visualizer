@@ -78,4 +78,6 @@
   /* ── Sizing ── */
   --sidebar-width: 256px;
   --error-panel-width: 320px;
+  /* mobile: clears the menu button (top:16px + padding:8px*2 + icon height ~24px) */
+  --overlay-sidebar-padding-top-mobile: 56px;
 }
