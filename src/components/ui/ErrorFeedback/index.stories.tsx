@@ -33,7 +33,13 @@ export const Default: Story = {
           },
         ],
       });
-      return <Story />;
+      return (
+        <div
+          style={{ position: 'relative', width: '100vw', height: '100vh', background: '#0a0a0f' }}
+        >
+          <Story />
+        </div>
+      );
     },
   ],
 };

@@ -22,7 +22,13 @@ export const Default: Story = {
   decorators: [
     (Story) => {
       useAudioStore.setState({ playbackState: 'idle' });
-      return <Story />;
+      return (
+        <div
+          style={{ position: 'relative', width: '100vw', height: '100vh', background: '#0a0a0f' }}
+        >
+          <Story />
+        </div>
+      );
     },
   ],
 };

@@ -20,7 +20,13 @@ export const Default: Story = {
     (Story) => {
       useAudioStore.setState({ mode: 'core', sensitivity: 1.0 });
       useThemeStore.setState({ preset: 'neonPink' });
-      return <Story />;
+      return (
+        <div
+          style={{ position: 'relative', width: '100vw', height: '100vh', background: '#0a0a0f' }}
+        >
+          <Story />
+        </div>
+      );
     },
   ],
 };

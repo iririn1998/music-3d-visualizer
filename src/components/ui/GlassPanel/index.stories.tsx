@@ -17,4 +17,11 @@ export const Default: Story = {
   args: {
     children: <p style={{ color: 'white', padding: '8px' }}>GlassPanel の中身</p>,
   },
+  decorators: [
+    (Story) => (
+      <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#0a0a0f' }}>
+        <Story />
+      </div>
+    ),
+  ],
 };
