@@ -12,12 +12,15 @@ interface AudioStore {
   playbackState: PlaybackState;
   mode: VisualizerMode;
   sensitivity: number;
+  hasFile: boolean;
+  fileName: string | null;
 
   setAudioData: (data: AudioData) => void;
   setSmoothedAudioData: (data: AudioData) => void;
   setPlaybackState: (state: PlaybackState) => void;
   setMode: (mode: VisualizerMode) => void;
   setSensitivity: (sensitivity: number) => void;
+  setFileLoaded: (fileName: string | null) => void;
 }
 
 export const useAudioStore = create<AudioStore>((set) => ({
@@ -26,10 +29,13 @@ export const useAudioStore = create<AudioStore>((set) => ({
   playbackState: 'idle',
   mode: 'core',
   sensitivity: 1.0,
+  hasFile: false,
+  fileName: null,
 
   setAudioData: (data) => set({ audioData: data }),
   setSmoothedAudioData: (data) => set({ smoothedAudioData: data }),
   setPlaybackState: (state) => set({ playbackState: state }),
   setMode: (mode) => set({ mode }),
   setSensitivity: (sensitivity) => set({ sensitivity }),
+  setFileLoaded: (fileName) => set({ hasFile: fileName !== null, fileName }),
 }));

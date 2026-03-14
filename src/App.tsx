@@ -5,12 +5,12 @@ import { useReducedMotionSync } from '@/hooks/useReducedMotionSync';
 
 const App = () => {
   useReducedMotionSync();
-  const { loadFile, stop } = useLocalAudio();
+  const { loadFile, play, stop } = useLocalAudio();
 
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <VisualizerCanvas />
-      <Overlay onLoadFile={loadFile} onStop={stop} />
+      <Overlay onLoadFile={loadFile} onPlay={play} onStop={stop} />
     </div>
   );
 };

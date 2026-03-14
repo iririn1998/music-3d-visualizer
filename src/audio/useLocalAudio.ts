@@ -16,19 +16,22 @@ export const useLocalAudio = () => {
   const prevTimeRef = useRef<number>(performance.now());
   const loadTokenRef = useRef<number>(0);
 
-  // セレクタで必要なアクション・値のみを個別に購読し、不要な再レンダリングを防ぐ
   const sensitivity = useAudioStore((s) => s.sensitivity);
   const setAudioData = useAudioStore((s) => s.setAudioData);
   const setSmoothedAudioData = useAudioStore((s) => s.setSmoothedAudioData);
   const setPlaybackState = useAudioStore((s) => s.setPlaybackState);
+  const setFileLoaded = useAudioStore((s) => s.setFileLoaded);
 
-  // smoothedAudioData はストアから購読せず、ref で完結させる
-  // （rAFループ内でのみ参照・更新するため、コンポーネントの再レンダリングは不要）
   const smoothedRef = useRef(useAudioStore.getState().smoothedAudioData);
 
+  const getAnalyzer = useCallback(() => {
+    if (!analyzerRef.current) {
+      analyzerRef.current = new AudioAnalyzer();
+    }
+    return analyzerRef.current;
+  }, []);
+
   const startLoop = useCallback(() => {
-    // Reset the timestamp so the first delta after a restart is near zero
-    // rather than spanning the entire gap since the loop was last running.
     prevTimeRef.current = performance.now();
     const loop = (now: number) => {
       const delta = Math.min((now - prevTimeRef.current) / 1000, 0.1);
@@ -56,33 +59,41 @@ export const useLocalAudio = () => {
     }
   }, []);
 
-  /** ローカルファイルを読み込んで再生を開始する */
+  /** ローカルファイルを読み込んでバッファにキャッシュする（再生は開始しない） */
   const loadFile = useCallback(
     async (file: File) => {
       const token = ++loadTokenRef.current;
+      const analyzer = getAnalyzer();
 
-      if (!analyzerRef.current) {
-        analyzerRef.current = new AudioAnalyzer();
-        analyzerRef.current.setOnEnded(() => {
-          stopLoop();
-          setPlaybackState('idle');
-        });
-      }
       stopLoop();
-      await analyzerRef.current.loadFile(file, sensitivity);
+      await analyzer.loadFile(file, sensitivity);
 
-      // 待機中に新しい loadFile が呼ばれていたら古い結果を破棄する
       if (token !== loadTokenRef.current) return;
 
-      setPlaybackState('playing');
-      startLoop();
+      setFileLoaded(file.name);
+      setPlaybackState('idle');
     },
-    [sensitivity, setPlaybackState, startLoop, stopLoop],
+    [sensitivity, setPlaybackState, setFileLoaded, stopLoop, getAnalyzer],
   );
 
-  /** 再生を停止する */
+  /** キャッシュ済みバッファを再生する */
+  const play = useCallback(() => {
+    const analyzer = getAnalyzer();
+    if (!analyzer.hasBuffer) return;
+
+    analyzer.setOnEnded(() => {
+      stopLoop();
+      setPlaybackState('paused');
+    });
+
+    analyzer.play(sensitivity);
+    setPlaybackState('playing');
+    startLoop();
+  }, [sensitivity, setPlaybackState, startLoop, stopLoop, getAnalyzer]);
+
+  /** 再生を停止し、再生位置をリセットする */
   const stop = useCallback(() => {
-    ++loadTokenRef.current; // invalidate any in-flight loadFile
+    ++loadTokenRef.current;
     stopLoop();
     analyzerRef.current?.stop();
     setPlaybackState('idle');
@@ -98,7 +109,7 @@ export const useLocalAudio = () => {
     const loadToken = loadTokenRef;
     const analyzer = analyzerRef;
     return () => {
-      ++loadToken.current; // invalidate any in-flight loadFile
+      ++loadToken.current;
       stopLoop();
       void analyzer.current?.dispose().catch((error) => {
         console.error('Failed to dispose AudioAnalyzer in useLocalAudio cleanup:', error);
@@ -106,5 +117,5 @@ export const useLocalAudio = () => {
     };
   }, [stopLoop]);
 
-  return { loadFile, stop };
+  return { loadFile, play, stop };
 };

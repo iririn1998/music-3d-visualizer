@@ -9,10 +9,11 @@ import styles from './index.module.css';
 
 type OverlayProps = {
   onLoadFile: (file: File) => void;
+  onPlay: () => void;
   onStop: () => void;
 };
 
-export const Overlay: FC<OverlayProps> = ({ onLoadFile, onStop }) => {
+export const Overlay: FC<OverlayProps> = ({ onLoadFile, onPlay, onStop }) => {
   const [menuOpen, setMenuOpen] = useState(true);
 
   return (
@@ -27,7 +28,7 @@ export const Overlay: FC<OverlayProps> = ({ onLoadFile, onStop }) => {
       </button>
 
       <div className={clsx(styles.sidebar, menuOpen ? styles.sidebarOpen : styles.sidebarClosed)}>
-        <PlayerControls onLoadFile={onLoadFile} onStop={onStop} />
+        <PlayerControls onLoadFile={onLoadFile} onPlay={onPlay} onStop={onStop} />
         <VisualizerControls />
         <AccessibilityPanel />
       </div>
