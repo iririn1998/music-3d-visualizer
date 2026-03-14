@@ -3,7 +3,7 @@ import { Accessibility } from 'lucide-react';
 import { useAccessibilityStore } from '@/stores/accessibilityStore';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { Slider } from '@/components/ui/slider';
-import styles from './styles.module.css';
+import styles from './index.module.css';
 
 const AccessibilityPanel: FC = () => {
   const shakeEnabled = useAccessibilityStore((s) => s.shakeEnabled);

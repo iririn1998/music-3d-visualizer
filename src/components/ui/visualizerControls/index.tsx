@@ -7,7 +7,7 @@ import type { ColorPreset } from '@/types/theme';
 import { GlassPanel } from '@/components/ui/GlassPanel';
 import { Slider } from '@/components/ui/slider';
 import { ToggleButton } from '@/components/ui/toggleButton';
-import styles from './styles.module.css';
+import styles from './index.module.css';
 
 const MODE_OPTIONS: { value: VisualizerMode; label: string }[] = [
   { value: 'core', label: 'Pulsing Core' },

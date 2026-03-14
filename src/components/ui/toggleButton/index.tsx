@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from 'react';
-import styles from './styles.module.css';
+import styles from './index.module.css';
 
 interface ToggleButtonProps {
   active: boolean;

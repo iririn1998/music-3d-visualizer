@@ -10,7 +10,7 @@ import { Music, Play, Square, Upload } from 'lucide-react';
 import { useAudioStore } from '@/stores/audioStore';
 import { useErrorStore } from '@/stores/errorStore';
 import { GlassPanel } from '@/components/ui/GlassPanel';
-import styles from './styles.module.css';
+import styles from './index.module.css';
 
 const SUPPORTED_TYPES = new Set([
   'audio/mpeg',
