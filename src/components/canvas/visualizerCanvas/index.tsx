@@ -15,7 +15,7 @@ const VisualizerCanvas: FC = () => {
     <Canvas
       camera={{ position: [0, 0, 6], fov: 60 }}
       gl={{ antialias: true, alpha: false }}
-      style={{ background: '#050505' }}
+      style={{ background: '#050505', width: '100%', height: '100%' }}
       dpr={[1, dpr]}
     >
       <Experience />
