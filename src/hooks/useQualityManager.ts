@@ -14,15 +14,13 @@ const UPGRADE_WAIT_SECONDS = 8.0;
 
 const QUALITY_ORDER: QualityLevel[] = ['low', 'medium', 'high'];
 
-function getQualityIndex(level: QualityLevel): number {
-  return QUALITY_ORDER.indexOf(level);
-}
+const getQualityIndex = (level: QualityLevel): number => QUALITY_ORDER.indexOf(level);
 
 /**
  * FPS を監視し、品質設定を動的に変更するフック。
  * 仕様に従い、降格は即時・昇格は長い待機時間を設けてチラつきを防止する。
  */
-export function useQualityManager() {
+export const useQualityManager = () => {
   const frameCountRef = useRef(0);
   const elapsedRef = useRef(0);
   const upgradeTimerRef = useRef(0);
@@ -57,4 +55,4 @@ export function useQualityManager() {
       upgradeTimerRef.current = 0;
     }
   });
-}
+};

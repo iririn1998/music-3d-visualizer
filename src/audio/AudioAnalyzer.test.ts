@@ -6,17 +6,16 @@ const BASS_MAX_HZ = 250;
 const MID_MAX_HZ = 4000;
 
 /** Returns the expected band boundary indices for a given sampleRate and binCount. */
-function bandIndices(binCount: number, sampleRate: number) {
+const bandIndices = (binCount: number, sampleRate: number) => {
   const hzPerBin = sampleRate / 2 / binCount;
   return {
     bassEnd: Math.floor(BASS_MAX_HZ / hzPerBin),
     midEnd: Math.floor(MID_MAX_HZ / hzPerBin),
   };
-}
+};
 
-function uniform(length: number, value: number): Uint8Array<ArrayBuffer> {
-  return new Uint8Array(length).fill(value);
-}
+const uniform = (length: number, value: number): Uint8Array<ArrayBuffer> =>
+  new Uint8Array(length).fill(value);
 
 describe('AudioAnalyzer', () => {
   let analyzer: AudioAnalyzer;
@@ -218,9 +217,8 @@ describe('AudioAnalyzer', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const priv = (inst: AudioAnalyzer) => inst as any;
 
-    function makeNode(extra: object = {}): AudioNode {
-      return { disconnect: vi.fn(), ...extra } as unknown as AudioNode;
-    }
+    const makeNode = (extra: object = {}): AudioNode =>
+      ({ disconnect: vi.fn(), ...extra }) as unknown as AudioNode;
 
     it('nulls source, gainNode, and analyser after stop()', () => {
       const inst = priv(analyzer);
@@ -297,7 +295,7 @@ describe('AudioAnalyzer', () => {
     const priv = (inst: AudioAnalyzer) => inst as any;
 
     /** Simulates the state AudioAnalyzer is in after loadFile() completes. */
-    function seedLoadedState(inst: AudioAnalyzer) {
+    const seedLoadedState = (inst: AudioAnalyzer) => {
       const p = priv(inst);
       const source = {
         stop: vi.fn(),
@@ -317,7 +315,7 @@ describe('AudioAnalyzer', () => {
         }
       };
       return source;
-    }
+    };
 
     it('fires the callback when audio ends naturally', () => {
       const onEnded = vi.fn();

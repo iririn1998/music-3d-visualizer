@@ -34,19 +34,19 @@ vi.mock('@react-three/fiber', () => ({
 //   mid  FPS (40) → ~38   between 30 and 55               ✓ (dead zone)
 //   high FPS (60) → ~57.1 > UPGRADE_THRESHOLD_FPS   (55)  ✓
 // ---------------------------------------------------------------------------
-function simulateSecond(fps: number): void {
+const simulateSecond = (fps: number): void => {
   const delta = 1.05 / fps;
   for (let i = 0; i < fps; i++) {
     capturedCallback({}, delta);
   }
-}
+};
 
 // ---------------------------------------------------------------------------
 // Preset helpers to reduce repetition
 // ---------------------------------------------------------------------------
-function setQuality(level: 'low' | 'medium' | 'high') {
+const setQuality = (level: 'low' | 'medium' | 'high') => {
   useQualityStore.getState().setQuality(level);
-}
+};
 
 describe('useQualityManager', () => {
   beforeEach(() => {

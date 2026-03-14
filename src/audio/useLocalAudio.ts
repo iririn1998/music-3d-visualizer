@@ -10,7 +10,7 @@ const SMOOTHING_LAMBDA = 5;
  * rAF ループで AudioAnalyzer.update() を呼び出し、
  * 平滑化済みデータを useAudioStore へ書き込む。
  */
-export function useLocalAudio() {
+export const useLocalAudio = () => {
   const analyzerRef = useRef<AudioAnalyzer | null>(null);
   const rafRef = useRef<number | null>(null);
   const prevTimeRef = useRef<number>(performance.now());
@@ -107,4 +107,4 @@ export function useLocalAudio() {
   }, [stopLoop]);
 
   return { loadFile, stop };
-}
+};

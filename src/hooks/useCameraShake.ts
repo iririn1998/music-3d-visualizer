@@ -15,7 +15,7 @@ const diff = new Vector3();
  * アクセシビリティ設定でオン/オフおよび強度を制御可能。
  * prefers-reduced-motion が有効の場合は自動的に無効化される。
  */
-export function useCameraShake() {
+export const useCameraShake = () => {
   const currentOffsetRef = useRef(new Vector3());
   const prevOffsetRef = useRef(new Vector3());
   const { camera } = useThree();
@@ -44,4 +44,4 @@ export function useCameraShake() {
     camera.position.add(diff);
     prevOffsetRef.current.copy(currentOffsetRef.current);
   });
-}
+};

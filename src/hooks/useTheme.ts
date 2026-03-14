@@ -27,13 +27,13 @@ export const bloomIntensityRef = { value: 1.0 };
  * エネルギー値に基づいて目標プリセットを決定する。
  * 低エネルギーなら寒色系、高エネルギーなら暖色系へ遷移。
  */
-function getTargetPresetByEnergy(energy: number, bass: number): ColorPreset {
+const getTargetPresetByEnergy = (energy: number, bass: number): ColorPreset => {
   const score = energy * 0.6 + bass * 0.4;
   if (score > 0.7) return 'solarFlare';
   if (score > 0.5) return 'neonPink';
   if (score > 0.3) return 'cyberLime';
   return 'electricBlue';
-}
+};
 
 /**
  * 毎フレーム呼ばれ、オーディオデータに基づいて以下を更新する:
@@ -43,7 +43,7 @@ function getTargetPresetByEnergy(energy: number, bass: number): ColorPreset {
  * 結果は currentColorsRef / bloomIntensityRef に直接書き込み、
  * Zustand の state 更新は行わない（React の再レンダーを防ぐため）。
  */
-export function useTheme() {
+export const useTheme = () => {
   const bloomRef = useRef(1.0);
   const presetRef = useRef(useThemeStore.getState().preset);
 
@@ -81,4 +81,4 @@ export function useTheme() {
       : MathUtils.damp(bloomRef.current, targetBloom, BLOOM_DAMP_SPEED, delta);
     bloomIntensityRef.value = bloomRef.current;
   });
-}
+};

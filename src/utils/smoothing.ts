@@ -10,12 +10,12 @@ import { type AudioData } from '@/types/audio';
  * @param lambda  減衰係数。大きいほど速く追従する（推奨: 3〜8）
  * @param delta   前フレームからの経過秒数
  */
-export function dampAudioData(
+export const dampAudioData = (
   current: AudioData,
   target: AudioData,
   lambda: number,
   delta: number,
-): AudioData {
+): AudioData => {
   return {
     bass: MathUtils.damp(current.bass, target.bass, lambda, delta),
     mid: MathUtils.damp(current.mid, target.mid, lambda, delta),
@@ -23,11 +23,10 @@ export function dampAudioData(
     energy: MathUtils.damp(current.energy, target.energy, lambda, delta),
     rms: MathUtils.damp(current.rms, target.rms, lambda, delta),
   };
-}
+};
 
 /**
  * 単一の数値を damp で補間するユーティリティ。
  */
-export function dampValue(current: number, target: number, lambda: number, delta: number): number {
-  return MathUtils.damp(current, target, lambda, delta);
-}
+export const dampValue = (current: number, target: number, lambda: number, delta: number): number =>
+  MathUtils.damp(current, target, lambda, delta);

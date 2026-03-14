@@ -5,7 +5,7 @@ import { useAccessibilityStore } from '@/stores/accessibilityStore';
  * prefers-reduced-motion メディアクエリの変化を監視し、
  * accessibilityStore へ自動反映するフック。
  */
-export function useReducedMotionSync() {
+export const useReducedMotionSync = () => {
   const setReducedMotion = useAccessibilityStore((s) => s.setReducedMotion);
 
   useEffect(() => {
@@ -18,4 +18,4 @@ export function useReducedMotionSync() {
     mql.addEventListener('change', handler);
     return () => mql.removeEventListener('change', handler);
   }, [setReducedMotion]);
-}
+};

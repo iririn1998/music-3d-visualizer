@@ -9,7 +9,7 @@ const DEFAULT_CAMERA_POSITION = new Vector3(0, 0, 6);
  * ビジュアライザーモードが変更された際に
  * カメラ位置をデフォルトにリセットするフック。
  */
-export function useModeReset() {
+export const useModeReset = () => {
   const { camera } = useThree();
   const mode = useAudioStore((state) => state.mode);
 
@@ -17,4 +17,4 @@ export function useModeReset() {
     camera.position.copy(DEFAULT_CAMERA_POSITION);
     camera.lookAt(0, 0, 0);
   }, [camera, mode]);
-}
+};
