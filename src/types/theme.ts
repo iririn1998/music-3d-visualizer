@@ -1,5 +1,13 @@
 import { Color } from 'three';
 
+export const STORYBOOK_TOKENS = {
+  colors: {
+    background: {
+      primary: '#0a0a0f',
+    },
+  },
+} as const;
+
 export interface ColorPalette {
   primary: Color;
   secondary: Color;
