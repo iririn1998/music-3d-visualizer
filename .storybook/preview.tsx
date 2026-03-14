@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Preview } from '@storybook/react-vite';
+import { STORYBOOK_TOKENS } from '../src/types/theme';
 
 const preview: Preview = {
   parameters: {
@@ -16,7 +17,14 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#0a0a0f' }}>
+      <div
+        style={{
+          position: 'relative',
+          width: '100vw',
+          height: '100vh',
+          background: STORYBOOK_TOKENS.colors.background.primary,
+        }}
+      >
         <Story />
       </div>
     ),
