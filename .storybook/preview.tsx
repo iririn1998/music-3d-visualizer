@@ -1,5 +1,7 @@
 import React from 'react';
 import type { Preview } from '@storybook/react-vite';
+import 'destyle.css';
+import '../src/styles/tokens.css';
 import { STORYBOOK_TOKENS } from '../src/types/theme';
 
 const preview: Preview = {
