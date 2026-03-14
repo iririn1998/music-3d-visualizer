@@ -1,9 +1,10 @@
+import clsx from 'clsx';
 import type { FC } from 'react';
 import { AlertCircle, AlertTriangle, X } from 'lucide-react';
 import { useErrorStore } from '@/stores/errorStore';
 import styles from './index.module.css';
 
-const ErrorFeedback: FC = () => {
+export const ErrorFeedback: FC = () => {
   const errors = useErrorStore((s) => s.errors);
   const dismissError = useErrorStore((s) => s.dismissError);
 
@@ -15,7 +16,10 @@ const ErrorFeedback: FC = () => {
         <div
           key={error.id}
           role="alert"
-          className={`${styles.alert} ${error.type === 'error' ? styles.alertError : styles.alertWarning}`}
+          className={clsx(
+            styles.alert,
+            error.type === 'error' ? styles.alertError : styles.alertWarning,
+          )}
         >
           {error.type === 'error' ? (
             <AlertCircle size={16} className={styles.alertIcon} />
@@ -38,5 +42,3 @@ const ErrorFeedback: FC = () => {
     </div>
   );
 };
-
-export { ErrorFeedback };

@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import type { FC } from 'react';
 import { Accessibility } from 'lucide-react';
 import { useAccessibilityStore } from '@/stores/accessibilityStore';
@@ -5,7 +6,7 @@ import { GlassPanel } from '@/components/ui/GlassPanel';
 import { Slider } from '@/components/ui/slider';
 import styles from './index.module.css';
 
-const AccessibilityPanel: FC = () => {
+export const AccessibilityPanel: FC = () => {
   const shakeEnabled = useAccessibilityStore((s) => s.shakeEnabled);
   const setShakeEnabled = useAccessibilityStore((s) => s.setShakeEnabled);
   const shakeIntensity = useAccessibilityStore((s) => s.shakeIntensity);
@@ -37,11 +38,9 @@ const AccessibilityPanel: FC = () => {
               aria-checked={shakeEnabled}
               aria-labelledby="camera-shake-label"
               onClick={() => setShakeEnabled(!shakeEnabled)}
-              className={`${styles.switchTrack} ${shakeEnabled ? styles.switchTrackOn : ''}`}
+              className={clsx(styles.switchTrack, shakeEnabled && styles.switchTrackOn)}
             >
-              <span
-                className={`${styles.switchThumb} ${shakeEnabled ? styles.switchThumbOn : ''}`}
-              />
+              <span className={clsx(styles.switchThumb, shakeEnabled && styles.switchThumbOn)} />
             </button>
           </div>
 
@@ -61,5 +60,3 @@ const AccessibilityPanel: FC = () => {
     </div>
   );
 };
-
-export { AccessibilityPanel };

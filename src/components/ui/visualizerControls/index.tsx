@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useState, type CSSProperties, type FC } from 'react';
 import { ChevronDown, ChevronUp, Settings } from 'lucide-react';
 import { useAudioStore } from '@/stores/audioStore';
@@ -22,7 +23,7 @@ const COLOR_OPTIONS: { value: ColorPreset; label: string; color: string }[] = [
   { value: 'solarFlare', label: 'Solar Flare', color: '#ff8844' },
 ];
 
-const VisualizerControls: FC = () => {
+export const VisualizerControls: FC = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   const mode = useAudioStore((s) => s.mode);
@@ -77,7 +78,10 @@ const VisualizerControls: FC = () => {
                     title={option.label}
                     aria-label={option.label}
                     aria-pressed={preset === option.value}
-                    className={`${styles.colorSwatch} ${preset === option.value ? styles.colorSwatchActive : ''}`}
+                    className={clsx(
+                      styles.colorSwatch,
+                      preset === option.value && styles.colorSwatchActive,
+                    )}
                     style={
                       {
                         backgroundColor: option.color,
@@ -108,5 +112,3 @@ const VisualizerControls: FC = () => {
     </div>
   );
 };
-
-export { VisualizerControls };

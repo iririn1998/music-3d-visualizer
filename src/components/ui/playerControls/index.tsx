@@ -30,12 +30,12 @@ const isAudioFile = (file: File): boolean => {
   return SUPPORTED_EXTENSIONS.test(file.name);
 };
 
-interface PlayerControlsProps {
+type PlayerControlsProps = {
   onLoadFile: (file: File) => void;
   onStop: () => void;
-}
+};
 
-const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onStop }) => {
+export const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onStop }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const playbackState = useAudioStore((s) => s.playbackState);
   const pushError = useErrorStore((s) => s.pushError);
@@ -149,5 +149,3 @@ const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onStop }) => {
     </div>
   );
 };
-
-export { PlayerControls };

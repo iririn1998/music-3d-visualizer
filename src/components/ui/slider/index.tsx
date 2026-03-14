@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import styles from './index.module.css';
 
-interface SliderProps {
+type SliderProps = {
   label: string;
   value: number;
   min: number;
@@ -9,9 +9,17 @@ interface SliderProps {
   step: number;
   onChange: (value: number) => void;
   formatValue?: (value: number) => string;
-}
+};
 
-const Slider: FC<SliderProps> = ({ label, value, min, max, step, onChange, formatValue }) => {
+export const Slider: FC<SliderProps> = ({
+  label,
+  value,
+  min,
+  max,
+  step,
+  onChange,
+  formatValue,
+}) => {
   const displayValue = formatValue ? formatValue(value) : value.toFixed(2);
 
   return (
@@ -32,5 +40,3 @@ const Slider: FC<SliderProps> = ({ label, value, min, max, step, onChange, forma
     </label>
   );
 };
-
-export { Slider };
