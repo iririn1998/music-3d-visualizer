@@ -1,6 +1,6 @@
 .root {
   pointer-events: auto;
-  width: 256px;
+  width: var(--sidebar-width);
 }
 
 .collapseButton {
@@ -8,9 +8,9 @@
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  font-size: 14px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-white-alpha-90);
   background: none;
   border: none;
   cursor: pointer;
@@ -20,41 +20,41 @@
 .collapseLabel {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-8);
 }
 
 .body {
-  margin-top: 12px;
+  margin-top: var(--spacing-12);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--spacing-16);
 }
 
 .sectionTitle {
-  margin-bottom: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: var(--spacing-8);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white-alpha-50);
   text-transform: uppercase;
 }
 
 .modeRow {
   display: flex;
-  gap: 4px;
+  gap: var(--spacing-4);
 }
 
 .colorRow {
   display: flex;
-  gap: 8px;
+  gap: var(--spacing-8);
 }
 
 .colorSwatch {
   width: 24px;
   height: 24px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   border: 2px solid transparent;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
   padding: 0;
   opacity: 0.6;
 }
@@ -66,5 +66,5 @@
 .colorSwatchActive {
   opacity: 1;
   transform: scale(1.1);
-  border-color: white;
+  border-color: var(--color-white);
 }
