@@ -23,11 +23,4 @@ export const Default: Story = {
     onChange: () => {},
     formatValue: (value) => `${(value * 100).toFixed(0)}%`,
   },
-  decorators: [
-    (Story) => (
-      <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#0a0a0f' }}>
-        <Story />
-      </div>
-    ),
-  ],
 };

@@ -20,11 +20,4 @@ export const Default: Story = {
     children: 'Pulsing',
     title: 'Pulsing Core',
   },
-  decorators: [
-    (Story) => (
-      <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#0a0a0f' }}>
-        <Story />
-      </div>
-    ),
-  ],
 };

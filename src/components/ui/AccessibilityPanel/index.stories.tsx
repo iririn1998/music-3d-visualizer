@@ -22,13 +22,7 @@ export const Default: Story = {
         shakeIntensity: 0.5,
         reducedMotion: false,
       });
-      return (
-        <div
-          style={{ position: 'relative', width: '100vw', height: '100vh', background: '#0a0a0f' }}
-        >
-          <Story />
-        </div>
-      );
+      return <Story />;
     },
   ],
 };
