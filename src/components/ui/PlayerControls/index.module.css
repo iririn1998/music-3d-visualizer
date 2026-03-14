@@ -1,51 +1,51 @@
 .root {
   pointer-events: auto;
-  width: 256px;
+  width: var(--sidebar-width);
 }
 
 .heading {
-  margin-bottom: 12px;
+  margin-bottom: var(--spacing-12);
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  gap: var(--spacing-8);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-white-alpha-90);
 }
 
 .dropZone {
-  margin-bottom: 12px;
+  margin-bottom: var(--spacing-12);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 20px 16px;
-  border-radius: 12px;
-  border: 1px dashed rgba(255, 255, 255, 0.2);
+  gap: var(--spacing-8);
+  padding: var(--spacing-20) var(--spacing-16);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--color-surface-20);
   cursor: pointer;
   transition:
-    border-color 0.2s,
-    background 0.2s;
+    border-color var(--transition-fast),
+    background var(--transition-fast);
 }
 
 .dropZone:hover {
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--color-white-alpha-40);
+  background: var(--color-surface-5);
 }
 
 .dropIcon {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-white-alpha-50);
 }
 
 .dropText {
   text-align: center;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: var(--font-size-sm);
+  color: var(--color-white-alpha-50);
 }
 
 .dropHint {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.3);
+  font-size: var(--font-size-xs);
+  color: var(--color-white-alpha-30);
 }
 
 .hiddenInput {
@@ -54,7 +54,7 @@
 
 .buttonRow {
   display: flex;
-  gap: 8px;
+  gap: var(--spacing-8);
 }
 
 .actionButton {
@@ -62,20 +62,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: var(--spacing-6);
   border: none;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 12px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.8);
-  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-8) var(--spacing-12);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white-alpha-80);
+  background: var(--color-surface-10);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
 }
 
 .actionButton:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--color-surface-20);
 }
 
 .actionButton:disabled {
@@ -84,5 +84,5 @@
 }
 
 .actionButton:disabled:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-surface-10);
 }

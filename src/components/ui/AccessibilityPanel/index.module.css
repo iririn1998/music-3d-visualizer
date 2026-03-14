@@ -1,31 +1,31 @@
 .root {
   pointer-events: auto;
-  width: 256px;
+  width: var(--sidebar-width);
 }
 
 .heading {
-  margin-bottom: 12px;
+  margin-bottom: var(--spacing-12);
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  gap: var(--spacing-8);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-white-alpha-90);
 }
 
 .warning {
-  margin-bottom: 12px;
-  border-radius: 8px;
-  background: rgba(234, 179, 8, 0.1);
-  padding: 8px 12px;
-  font-size: 12px;
-  color: rgba(253, 224, 71, 0.8);
+  margin-bottom: var(--spacing-12);
+  border-radius: var(--radius-sm);
+  background: var(--color-warning-bg);
+  padding: var(--spacing-8) var(--spacing-12);
+  font-size: var(--font-size-sm);
+  color: var(--color-warning-text-muted);
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--spacing-12);
 }
 
 .switchRow {
@@ -35,24 +35,24 @@
 }
 
 .switchLabel {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--font-size-sm);
+  color: var(--color-white-alpha-70);
 }
 
 .switchTrack {
   position: relative;
   width: 36px;
   height: 20px;
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
   border: none;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background var(--transition-fast);
   padding: 0;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-surface-10);
 }
 
 .switchTrackOn {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--color-surface-30);
 }
 
 .switchThumb {
@@ -61,9 +61,9 @@
   left: 2px;
   width: 16px;
   height: 16px;
-  border-radius: 50%;
-  background: white;
-  transition: transform 0.2s;
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  transition: transform var(--transition-fast);
   transform: translateX(0);
 }
 
