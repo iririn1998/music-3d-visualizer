@@ -9,7 +9,8 @@ import {
 import { Music, Play, Square, Upload } from 'lucide-react';
 import { useAudioStore } from '@/stores/audioStore';
 import { useErrorStore } from '@/stores/errorStore';
-import { GlassPanel } from '@/components/ui/glassPanel';
+import { GlassPanel } from '@/components/ui/GlassPanel';
+import styles from './styles.module.css';
 
 const SUPPORTED_TYPES = new Set([
   'audio/mpeg',
@@ -93,9 +94,9 @@ const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onStop }) => {
   const isPlaying = playbackState === 'playing';
 
   return (
-    <div className="pointer-events-auto w-64">
+    <div className={styles.root}>
       <GlassPanel>
-        <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white/90">
+        <h3 className={styles.heading}>
           <Music size={14} />
           Player
         </h3>
@@ -103,20 +104,16 @@ const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onStop }) => {
         <div
           onDrop={handleDrop}
           onDragOver={handleDragOver}
-          className="mb-3 flex cursor-pointer flex-col items-center gap-2 rounded-xl
-            border border-dashed border-white/20 px-4 py-5
-            transition-colors duration-200 hover:border-white/40 hover:bg-white/5"
+          className={styles.dropZone}
           onClick={() => fileInputRef.current?.click()}
           onKeyDown={handleKeyDown}
           role="button"
           tabIndex={0}
           aria-label="音声ファイルをアップロード"
         >
-          <Upload size={20} className="text-white/50" />
-          <span className="text-center text-xs text-white/50">
-            クリックまたはドラッグ&amp;ドロップ
-          </span>
-          <span className="text-[10px] text-white/30">MP3, WAV, OGG, FLAC, AAC, M4A, WebM</span>
+          <Upload size={20} className={styles.dropIcon} />
+          <span className={styles.dropText}>クリックまたはドラッグ&amp;ドロップ</span>
+          <span className={styles.dropHint}>MP3, WAV, OGG, FLAC, AAC, M4A, WebM</span>
         </div>
 
         <input
@@ -124,18 +121,16 @@ const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onStop }) => {
           type="file"
           accept="audio/*"
           onChange={handleFileChange}
-          className="hidden"
+          className={styles.hiddenInput}
           aria-label="音声ファイル選択"
         />
 
-        <div className="flex gap-2">
+        <div className={styles.buttonRow}>
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={isPlaying}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-white/10 px-3 py-2
-              text-xs font-medium text-white/80 transition-all duration-200
-              hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-30"
+            className={styles.actionButton}
           >
             <Play size={12} />
             再生
@@ -144,9 +139,7 @@ const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onStop }) => {
             type="button"
             onClick={onStop}
             disabled={!isPlaying}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-white/10 px-3 py-2
-              text-xs font-medium text-white/80 transition-all duration-200
-              hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-30"
+            className={styles.actionButton}
           >
             <Square size={12} />
             停止

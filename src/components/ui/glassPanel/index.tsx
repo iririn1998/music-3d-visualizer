@@ -1,4 +1,5 @@
 import type { FC, ReactNode } from 'react';
+import styles from './styles.module.css';
 
 interface GlassPanelProps {
   children: ReactNode;
@@ -6,13 +7,7 @@ interface GlassPanelProps {
 }
 
 const GlassPanel: FC<GlassPanelProps> = ({ children, className = '' }) => {
-  return (
-    <div
-      className={`rounded-2xl border border-white/10 bg-white/5 p-4 shadow-lg backdrop-blur-xl ${className}`}
-    >
-      {children}
-    </div>
-  );
+  return <div className={`${styles.panel} ${className}`}>{children}</div>;
 };
 
 export { GlassPanel };

@@ -4,6 +4,7 @@ import { AccessibilityPanel } from '@/components/ui/accessibilityPanel';
 import { ErrorFeedback } from '@/components/ui/errorFeedback';
 import { PlayerControls } from '@/components/ui/playerControls';
 import { VisualizerControls } from '@/components/ui/visualizerControls';
+import styles from './styles.module.css';
 
 interface OverlayProps {
   onLoadFile: (file: File) => void;
@@ -14,29 +15,23 @@ const Overlay: FC<OverlayProps> = ({ onLoadFile, onStop }) => {
   const [menuOpen, setMenuOpen] = useState(true);
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-10 flex">
+    <div className={styles.root}>
       <button
         type="button"
         onClick={() => setMenuOpen((prev) => !prev)}
-        className="pointer-events-auto absolute top-4 left-4 z-20 rounded-xl border border-white/10
-          bg-white/5 p-2 text-white/70 shadow-lg backdrop-blur-xl
-          transition-colors hover:bg-white/10 md:hidden"
+        className={styles.menuButton}
         aria-label={menuOpen ? 'メニューを閉じる' : 'メニューを開く'}
       >
         {menuOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
-      <div
-        className={`flex max-h-full flex-col gap-3 overflow-y-auto p-4 pt-14 transition-transform duration-300
-          md:translate-x-0 md:pt-4
-          ${menuOpen ? 'translate-x-0' : '-translate-x-full'}`}
-      >
+      <div className={`${styles.sidebar} ${menuOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
         <PlayerControls onLoadFile={onLoadFile} onStop={onStop} />
         <VisualizerControls />
         <AccessibilityPanel />
       </div>
 
-      <div className="ml-auto p-4">
+      <div className={styles.errorArea}>
         <ErrorFeedback />
       </div>
     </div>

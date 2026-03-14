@@ -4,9 +4,10 @@ import { useAudioStore } from '@/stores/audioStore';
 import { useThemeStore } from '@/stores/themeStore';
 import type { VisualizerMode } from '@/types/audio';
 import type { ColorPreset } from '@/types/theme';
-import { GlassPanel } from '@/components/ui/glassPanel';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 import { Slider } from '@/components/ui/slider';
 import { ToggleButton } from '@/components/ui/toggleButton';
+import styles from './styles.module.css';
 
 const MODE_OPTIONS: { value: VisualizerMode; label: string }[] = [
   { value: 'core', label: 'Pulsing Core' },
@@ -33,14 +34,14 @@ const VisualizerControls: FC = () => {
   const setPreset = useThemeStore((s) => s.setPreset);
 
   return (
-    <div className="pointer-events-auto w-64">
+    <div className={styles.root}>
       <GlassPanel>
         <button
           type="button"
           onClick={() => setCollapsed((prev) => !prev)}
-          className="flex w-full items-center justify-between text-sm font-semibold text-white/90"
+          className={styles.collapseButton}
         >
-          <span className="flex items-center gap-2">
+          <span className={styles.collapseLabel}>
             <Settings size={14} />
             Controls
           </span>
@@ -48,10 +49,10 @@ const VisualizerControls: FC = () => {
         </button>
 
         {!collapsed && (
-          <div className="mt-3 flex flex-col gap-4">
+          <div className={styles.body}>
             <section>
-              <h3 className="mb-2 text-xs font-medium text-white/50 uppercase">Mode</h3>
-              <div className="flex gap-1">
+              <h3 className={styles.sectionTitle}>Mode</h3>
+              <div className={styles.modeRow}>
                 {MODE_OPTIONS.map((option) => (
                   <ToggleButton
                     key={option.value}
@@ -66,8 +67,8 @@ const VisualizerControls: FC = () => {
             </section>
 
             <section>
-              <h3 className="mb-2 text-xs font-medium text-white/50 uppercase">Color</h3>
-              <div className="flex gap-2">
+              <h3 className={styles.sectionTitle}>Color</h3>
+              <div className={styles.colorRow}>
                 {COLOR_OPTIONS.map((option) => (
                   <button
                     key={option.value}
@@ -76,16 +77,12 @@ const VisualizerControls: FC = () => {
                     title={option.label}
                     aria-label={option.label}
                     aria-pressed={preset === option.value}
-                    className={`h-6 w-6 rounded-full border-2 transition-all duration-200
-                      ${
-                        preset === option.value
-                          ? 'scale-110 border-white shadow-[0_0_8px_var(--glow)]'
-                          : 'border-transparent opacity-60 hover:opacity-100'
-                      }`}
+                    className={`${styles.colorSwatch} ${preset === option.value ? styles.colorSwatchActive : ''}`}
                     style={
                       {
                         backgroundColor: option.color,
                         '--glow': option.color,
+                        boxShadow: preset === option.value ? `0 0 8px ${option.color}` : undefined,
                       } as CSSProperties
                     }
                   />
@@ -94,7 +91,7 @@ const VisualizerControls: FC = () => {
             </section>
 
             <section>
-              <h3 className="mb-2 text-xs font-medium text-white/50 uppercase">Audio</h3>
+              <h3 className={styles.sectionTitle}>Audio</h3>
               <Slider
                 label="Sensitivity"
                 value={sensitivity}

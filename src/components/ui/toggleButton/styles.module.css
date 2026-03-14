@@ -1,0 +1,27 @@
+.button {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.active {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
+}
+
+.active:hover {
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+}

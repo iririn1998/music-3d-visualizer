@@ -1,8 +1,9 @@
 import type { FC } from 'react';
 import { Accessibility } from 'lucide-react';
 import { useAccessibilityStore } from '@/stores/accessibilityStore';
-import { GlassPanel } from '@/components/ui/glassPanel';
+import { GlassPanel } from '@/components/ui/GlassPanel';
 import { Slider } from '@/components/ui/slider';
+import styles from './styles.module.css';
 
 const AccessibilityPanel: FC = () => {
   const shakeEnabled = useAccessibilityStore((s) => s.shakeEnabled);
@@ -12,22 +13,22 @@ const AccessibilityPanel: FC = () => {
   const reducedMotion = useAccessibilityStore((s) => s.reducedMotion);
 
   return (
-    <div className="pointer-events-auto w-64">
+    <div className={styles.root}>
       <GlassPanel>
-        <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white/90">
+        <h3 className={styles.heading}>
           <Accessibility size={14} />
           Accessibility
         </h3>
 
         {reducedMotion && (
-          <div className="mb-3 rounded-lg bg-yellow-500/10 px-3 py-2 text-xs text-yellow-300/80">
+          <div className={styles.warning}>
             システムの「視覚効果を減らす」設定が有効です。アニメーションが抑制されます。
           </div>
         )}
 
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <span id="camera-shake-label" className="text-xs text-white/70">
+        <div className={styles.content}>
+          <div className={styles.switchRow}>
+            <span id="camera-shake-label" className={styles.switchLabel}>
               Camera Shake
             </span>
             <button
@@ -36,12 +37,10 @@ const AccessibilityPanel: FC = () => {
               aria-checked={shakeEnabled}
               aria-labelledby="camera-shake-label"
               onClick={() => setShakeEnabled(!shakeEnabled)}
-              className={`relative h-5 w-9 rounded-full transition-colors duration-200
-                ${shakeEnabled ? 'bg-white/30' : 'bg-white/10'}`}
+              className={`${styles.switchTrack} ${shakeEnabled ? styles.switchTrackOn : ''}`}
             >
               <span
-                className={`absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white transition-transform duration-200
-                  ${shakeEnabled ? 'translate-x-4' : 'translate-x-0'}`}
+                className={`${styles.switchThumb} ${shakeEnabled ? styles.switchThumbOn : ''}`}
               />
             </button>
           </div>
