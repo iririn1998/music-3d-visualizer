@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import { useState, type FC } from 'react';
 import { Menu, X } from 'lucide-react';
-import { AccessibilityPanel } from '@/components/ui/AccessibilityPanel';
 import { ErrorFeedback } from '@/components/ui/ErrorFeedback';
 import { PlayerControls } from '@/components/ui/PlayerControls';
 import { VisualizerControls } from '@/components/ui/VisualizerControls';
@@ -30,7 +29,6 @@ export const Overlay: FC<OverlayProps> = ({ onLoadFile, onPlay, onStop }) => {
       <div className={clsx(styles.sidebar, menuOpen ? styles.sidebarOpen : styles.sidebarClosed)}>
         <PlayerControls onLoadFile={onLoadFile} onPlay={onPlay} onStop={onStop} />
         <VisualizerControls />
-        <AccessibilityPanel />
       </div>
 
       <div className={styles.errorArea}>

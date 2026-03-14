@@ -2,7 +2,6 @@ import { useRef, type FC } from 'react';
 import { OrbitControls } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import type { PointLight } from 'three';
-import { useCameraShake } from '@/hooks/useCameraShake';
 import { useModeReset } from '@/hooks/useModeReset';
 import { currentColorsRef, useTheme } from '@/hooks/useTheme';
 import { useQualityManager } from '@/hooks/useQualityManager';
@@ -21,7 +20,6 @@ const Experience: FC = () => {
 
   useTheme();
   useQualityManager();
-  useCameraShake();
   useModeReset();
 
   useFrame(() => {

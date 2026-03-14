@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useAccessibilityStore } from '@/stores/accessibilityStore';
 import { useAudioStore } from '@/stores/audioStore';
 import { useErrorStore } from '@/stores/errorStore';
 import { useThemeStore } from '@/stores/themeStore';
@@ -27,11 +26,6 @@ export const Default: Story = {
     (Story) => {
       useAudioStore.setState({ playbackState: 'idle', mode: 'core', sensitivity: 1.0 });
       useThemeStore.setState({ preset: 'neonPink' });
-      useAccessibilityStore.setState({
-        shakeEnabled: true,
-        shakeIntensity: 0.5,
-        reducedMotion: false,
-      });
       useErrorStore.setState({ errors: [] });
       return <Story />;
     },
