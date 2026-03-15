@@ -23,6 +23,10 @@ export class AudioAnalyzer {
   /** 進行中の loadFile() 呼び出しを一意に識別するID。新しい呼び出しが来たら更新される */
   private _loadId = 0;
 
+  private _audioBuffer: AudioBuffer | null = null;
+  private _pauseOffset = 0;
+  private _startedAt = 0;
+
   get currentData(): AudioData {
     return this._currentData;
   }
@@ -48,15 +52,15 @@ export class AudioAnalyzer {
     return analyser;
   }
 
+  get hasBuffer(): boolean {
+    return this._audioBuffer !== null;
+  }
+
   /**
-   * ローカルの File オブジェクトを読み込み、デコードして再生を開始する。
-   * @param file MP3 / WAV 等の音声ファイル
-   * @param sensitivity 感度係数（0.1〜2.0 程度）
+   * ローカルの File オブジェクトを読み込み、デコードしてバッファにキャッシュする。
+   * 再生は開始しない。再生するには play() を呼ぶ。
    */
   async loadFile(file: File, sensitivity = 1.0): Promise<void> {
-    // インクリメントして「自分の世代」を確定させる。
-    // await の合間に次の loadFile() が呼ばれると _loadId が変わるため、
-    // 古い呼び出しは自身のIDと一致しなくなり中断できる。
     const myId = ++this._loadId;
 
     this.stop();
@@ -72,6 +76,23 @@ export class AudioAnalyzer {
     const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
     if (myId !== this._loadId) return;
 
+    this._audioBuffer = audioBuffer;
+    this._pauseOffset = 0;
+
+    if (this.gainNode) {
+      this.gainNode.gain.value = sensitivity;
+    }
+  }
+
+  /**
+   * キャッシュ済みの AudioBuffer を先頭（または一時停止位置）から再生する。
+   */
+  play(sensitivity = 1.0): void {
+    if (!this._audioBuffer) return;
+
+    this.stopSource();
+
+    const ctx = this.ensureContext();
     const analyser = this.setupAnalyser(ctx);
 
     const gainNode = ctx.createGain();
@@ -79,23 +100,67 @@ export class AudioAnalyzer {
     this.gainNode = gainNode;
 
     const source = ctx.createBufferSource();
-    source.buffer = audioBuffer;
+    source.buffer = this._audioBuffer;
     source.connect(gainNode);
     gainNode.connect(analyser);
     analyser.connect(ctx.destination);
-    source.start(0);
+    source.start(0, this._pauseOffset);
+    this._startedAt = ctx.currentTime - this._pauseOffset;
 
-    // When the buffer finishes playing naturally, clean up and notify the consumer.
-    // The guard ensures this is skipped if stop() was already called manually
-    // (stop() nulls this.source synchronously, so the check fails when onended fires).
     source.onended = () => {
       if (this.source === source) {
-        this.stop();
+        this._pauseOffset = 0;
+        this.stopSource();
         this._onEnded?.();
       }
     };
 
     this.source = source;
+  }
+
+  /**
+   * 再生を一時停止し、再開位置を保持する。
+   */
+  pause(): void {
+    if (!this.source || !this.context) return;
+    this._pauseOffset = this.context.currentTime - this._startedAt;
+    this.stopSource();
+  }
+
+  private stopSource(): void {
+    if (this.source) {
+      if ('stop' in this.source) {
+        try {
+          (this.source as AudioBufferSourceNode).stop();
+        } catch {
+          // already stopped
+        }
+      }
+      try {
+        this.source.disconnect();
+      } catch {
+        // already disconnected
+      }
+      this.source = null;
+    }
+
+    if (this.gainNode) {
+      try {
+        this.gainNode.disconnect();
+      } catch {
+        // already disconnected
+      }
+      this.gainNode = null;
+    }
+
+    if (this.analyser) {
+      try {
+        this.analyser.disconnect();
+      } catch {
+        // already disconnected
+      }
+      this.analyser = null;
+    }
   }
 
   /**
@@ -179,43 +244,10 @@ export class AudioAnalyzer {
     return sum / (end - start);
   }
 
-  /** 再生を停止し、リソースを解放する */
+  /** 再生を停止し、再生位置をリセットする（バッファは保持） */
   stop(): void {
-    if (this.source) {
-      if ('stop' in this.source) {
-        try {
-          (this.source as AudioBufferSourceNode).stop();
-        } catch {
-          // すでに停止済みの場合は無視
-        }
-      }
-      try {
-        // AudioNode としてオーディオグラフから切り離す
-        (this.source as unknown as AudioNode).disconnect();
-      } catch {
-        // すでに disconnect 済みの場合は無視
-      }
-      this.source = null;
-    }
-
-    if (this.gainNode) {
-      try {
-        this.gainNode.disconnect();
-      } catch {
-        // すでに disconnect 済みの場合は無視
-      }
-      this.gainNode = null;
-    }
-
-    if (this.analyser) {
-      try {
-        this.analyser.disconnect();
-      } catch {
-        // すでに disconnect 済みの場合は無視
-      }
-      this.analyser = null;
-    }
-
+    this.stopSource();
+    this._pauseOffset = 0;
     this._currentData = { ...DEFAULT_AUDIO_DATA };
   }
 

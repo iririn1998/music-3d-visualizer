@@ -5,6 +5,113 @@ import { AudioAnalyzer } from '@/audio/AudioAnalyzer';
 const BASS_MAX_HZ = 250;
 const MID_MAX_HZ = 4000;
 
+// ---------------------------------------------------------------------------
+// Web Audio API mock factory
+// ---------------------------------------------------------------------------
+
+/** Creates a minimal AudioBufferSourceNode mock. */
+const makeSource = () => ({
+  buffer: null as AudioBuffer | null,
+  onended: null as ((e: Event) => void) | null,
+  connect: vi.fn(),
+  disconnect: vi.fn(),
+  start: vi.fn(),
+  stop: vi.fn(),
+});
+
+/** Creates a minimal AnalyserNode mock. */
+const makeAnalyser = (binCount = 1024) => ({
+  fftSize: 2048,
+  smoothingTimeConstant: 0,
+  frequencyBinCount: binCount,
+  connect: vi.fn(),
+  disconnect: vi.fn(),
+  getByteFrequencyData: vi.fn((arr: Uint8Array) => arr.fill(0)),
+});
+
+/** Creates a minimal GainNode mock. */
+const makeGain = () => ({
+  gain: { value: 1 },
+  connect: vi.fn(),
+  disconnect: vi.fn(),
+});
+
+type SourceMock = ReturnType<typeof makeSource>;
+type AnalyserMock = ReturnType<typeof makeAnalyser>;
+type GainMock = ReturnType<typeof makeGain>;
+
+interface AudioContextMock {
+  state: string;
+  currentTime: number;
+  resume: ReturnType<typeof vi.fn>;
+  close: ReturnType<typeof vi.fn>;
+  createAnalyser: ReturnType<typeof vi.fn>;
+  createGain: ReturnType<typeof vi.fn>;
+  createBufferSource: ReturnType<typeof vi.fn>;
+  destination: object;
+  _latestSource: SourceMock | null;
+  _latestAnalyser: AnalyserMock | null;
+  _latestGain: GainMock | null;
+}
+
+/**
+ * Installs a global AudioContext mock and returns a handle to introspect the
+ * most-recently created nodes after each `play()` call.
+ */
+const installAudioContextMock = (): AudioContextMock => {
+  const ctx: AudioContextMock = {
+    state: 'running',
+    currentTime: 0,
+    resume: vi.fn().mockResolvedValue(undefined),
+    close: vi.fn().mockResolvedValue(undefined),
+    destination: {},
+    _latestSource: null,
+    _latestAnalyser: null,
+    _latestGain: null,
+    createAnalyser: vi.fn(() => {
+      const node = makeAnalyser();
+      ctx._latestAnalyser = node;
+      return node;
+    }),
+    createGain: vi.fn(() => {
+      const node = makeGain();
+      ctx._latestGain = node;
+      return node;
+    }),
+    createBufferSource: vi.fn(() => {
+      const node = makeSource();
+      ctx._latestSource = node;
+      return node;
+    }),
+  };
+
+  vi.stubGlobal('AudioContext', function () {
+    return ctx;
+  });
+  return ctx;
+};
+
+/** Builds a minimal AudioBuffer stub with a given duration (seconds). */
+const makeAudioBuffer = (duration = 3): AudioBuffer =>
+  ({ duration, length: duration * 44100, sampleRate: 44100 }) as unknown as AudioBuffer;
+
+/**
+ * Loads a fake file into an analyzer by stubbing File.arrayBuffer() and
+ * AudioContext.decodeAudioData(), then calling loadFile().
+ */
+const loadFakeFile = async (
+  analyzer: AudioAnalyzer,
+  ctx: AudioContextMock,
+  audioBuffer: AudioBuffer = makeAudioBuffer(),
+): Promise<void> => {
+  const fakeArrayBuffer = new ArrayBuffer(8);
+  const fileMock = { arrayBuffer: vi.fn().mockResolvedValue(fakeArrayBuffer) } as unknown as File;
+  (ctx as unknown as { decodeAudioData: ReturnType<typeof vi.fn> }).decodeAudioData = vi
+    .fn()
+    .mockResolvedValue(audioBuffer);
+  await analyzer.loadFile(fileMock);
+};
+
 /** Returns the expected band boundary indices for a given sampleRate and binCount. */
 const bandIndices = (binCount: number, sampleRate: number) => {
   const hzPerBin = sampleRate / 2 / binCount;
@@ -284,6 +391,214 @@ describe('AudioAnalyzer', () => {
 
       expect(() => analyzer.stop()).not.toThrow();
       expect(inst.source).toBeNull();
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // hasBuffer – buffer caching via loadFile()
+  // ---------------------------------------------------------------------------
+  describe('hasBuffer', () => {
+    let ctx: AudioContextMock;
+
+    beforeEach(() => {
+      ctx = installAudioContextMock();
+    });
+
+    it('is false before any file is loaded', () => {
+      expect(analyzer.hasBuffer).toBe(false);
+    });
+
+    it('is true after loadFile() resolves successfully', async () => {
+      await loadFakeFile(analyzer, ctx);
+      expect(analyzer.hasBuffer).toBe(true);
+    });
+
+    it('remains true after play() is called', async () => {
+      await loadFakeFile(analyzer, ctx);
+      analyzer.play();
+      expect(analyzer.hasBuffer).toBe(true);
+    });
+
+    it('remains true after stop() is called (buffer is retained)', async () => {
+      await loadFakeFile(analyzer, ctx);
+      analyzer.stop();
+      expect(analyzer.hasBuffer).toBe(true);
+    });
+
+    it('resets pauseOffset to 0 when a new file is loaded', async () => {
+      await loadFakeFile(analyzer, ctx);
+      analyzer.play();
+      // Simulate some playback progress
+      ctx.currentTime = 2;
+      analyzer.pause();
+      // Load a new file – should reset pause offset
+      await loadFakeFile(analyzer, ctx);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect((analyzer as any)._pauseOffset).toBe(0);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // play() – node wiring and playback initiation
+  // ---------------------------------------------------------------------------
+  describe('play()', () => {
+    let ctx: AudioContextMock;
+
+    beforeEach(() => {
+      ctx = installAudioContextMock();
+    });
+
+    it('does nothing and does not throw when no buffer is loaded', () => {
+      expect(() => analyzer.play()).not.toThrow();
+      expect(ctx.createBufferSource).not.toHaveBeenCalled();
+    });
+
+    it('creates and starts a BufferSourceNode after loadFile()', async () => {
+      await loadFakeFile(analyzer, ctx);
+      analyzer.play();
+
+      expect(ctx.createBufferSource).toHaveBeenCalledOnce();
+      expect(ctx._latestSource!.start).toHaveBeenCalledOnce();
+    });
+
+    it('starts playback from the beginning (offset=0) on first play', async () => {
+      await loadFakeFile(analyzer, ctx);
+      analyzer.play();
+
+      expect(ctx._latestSource!.start).toHaveBeenCalledWith(0, 0);
+    });
+
+    it('assigns the decoded AudioBuffer to the source node', async () => {
+      const audioBuffer = makeAudioBuffer(5);
+      await loadFakeFile(analyzer, ctx, audioBuffer);
+      analyzer.play();
+
+      expect(ctx._latestSource!.buffer).toBe(audioBuffer);
+    });
+
+    it('applies the sensitivity value to the GainNode', async () => {
+      await loadFakeFile(analyzer, ctx);
+      analyzer.play(1.5);
+
+      expect(ctx._latestGain!.gain.value).toBe(1.5);
+    });
+
+    it('fires onended callback when source.onended is triggered via play()', async () => {
+      await loadFakeFile(analyzer, ctx);
+
+      const onEnded = vi.fn();
+      analyzer.setOnEnded(onEnded);
+      analyzer.play();
+
+      // Simulate natural audio completion
+      ctx._latestSource!.onended!(new Event('ended'));
+
+      expect(onEnded).toHaveBeenCalledOnce();
+    });
+
+    it('resets pauseOffset to 0 on natural completion', async () => {
+      await loadFakeFile(analyzer, ctx);
+      analyzer.play();
+      ctx.currentTime = 2;
+      analyzer.pause();
+
+      // Resume and let it end naturally
+      analyzer.play();
+      ctx._latestSource!.onended!(new Event('ended'));
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect((analyzer as any)._pauseOffset).toBe(0);
+    });
+
+    it('does NOT fire onended after manual stop() before onended event', async () => {
+      await loadFakeFile(analyzer, ctx);
+
+      const onEnded = vi.fn();
+      analyzer.setOnEnded(onEnded);
+      analyzer.play();
+      const staleSource = ctx._latestSource!;
+
+      analyzer.stop();
+      staleSource.onended!(new Event('ended'));
+
+      expect(onEnded).not.toHaveBeenCalled();
+    });
+
+    it('nulls all nodes after natural completion', async () => {
+      await loadFakeFile(analyzer, ctx);
+      analyzer.play();
+      ctx._latestSource!.onended!(new Event('ended'));
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const priv = analyzer as any;
+      expect(priv.source).toBeNull();
+      expect(priv.gainNode).toBeNull();
+      expect(priv.analyser).toBeNull();
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // pause() and resume – offset preservation
+  // ---------------------------------------------------------------------------
+  describe('pause() and resume via play()', () => {
+    let ctx: AudioContextMock;
+
+    beforeEach(() => {
+      ctx = installAudioContextMock();
+    });
+
+    it('stores the current playback position in pauseOffset', async () => {
+      await loadFakeFile(analyzer, ctx);
+      analyzer.play();
+
+      // AudioContext clock advances to 2 s
+      // _startedAt was set to ctx.currentTime(0) - _pauseOffset(0) = 0
+      ctx.currentTime = 2;
+      analyzer.pause();
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect((analyzer as any)._pauseOffset).toBe(2);
+    });
+
+    it('resumes from the stored offset, not from the beginning', async () => {
+      await loadFakeFile(analyzer, ctx);
+      analyzer.play();
+
+      ctx.currentTime = 3;
+      analyzer.pause();
+
+      // Reset clock to simulate a new play() invocation
+      ctx.currentTime = 5;
+      analyzer.play();
+
+      // start(0, offset) – second arg should be the stored 3-second offset
+      expect(ctx._latestSource!.start).toHaveBeenCalledWith(0, 3);
+    });
+
+    it('resets pauseOffset to 0 after stop(), so next play() starts from beginning', async () => {
+      await loadFakeFile(analyzer, ctx);
+      analyzer.play();
+
+      ctx.currentTime = 4;
+      analyzer.pause();
+      analyzer.stop();
+
+      analyzer.play();
+      expect(ctx._latestSource!.start).toHaveBeenCalledWith(0, 0);
+    });
+
+    it('does nothing when pause() is called without an active source', () => {
+      expect(() => analyzer.pause()).not.toThrow();
+    });
+
+    it('stops the previous source node when play() is called while already playing', async () => {
+      await loadFakeFile(analyzer, ctx);
+      analyzer.play();
+      const firstSource = ctx._latestSource!;
+
+      analyzer.play();
+
+      expect(firstSource.stop).toHaveBeenCalled();
     });
   });
 

@@ -16,4 +16,4 @@ export const DEFAULT_AUDIO_DATA: AudioData = {
   rms: 0,
 };
 
-export type PlaybackState = 'idle' | 'playing' | 'paused';
+export type PlaybackState = 'idle' | 'playing' | 'paused' | 'ended';

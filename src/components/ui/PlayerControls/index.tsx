@@ -32,12 +32,14 @@ const isAudioFile = (file: File): boolean => {
 
 type PlayerControlsProps = {
   onLoadFile: (file: File) => void;
+  onPlay: () => void;
   onStop: () => void;
 };
 
-export const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onStop }) => {
+export const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onPlay, onStop }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const playbackState = useAudioStore((s) => s.playbackState);
+  const fileName = useAudioStore((s) => s.fileName);
   const pushError = useErrorStore((s) => s.pushError);
 
   const handleFileChange = useCallback(
@@ -92,6 +94,7 @@ export const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onStop }) 
   }, []);
 
   const isPlaying = playbackState === 'playing';
+  const hasFile = fileName !== null;
 
   return (
     <div className={styles.root}>
@@ -116,6 +119,13 @@ export const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onStop }) 
           <span className={styles.dropHint}>MP3, WAV, OGG, FLAC, AAC, M4A, WebM</span>
         </div>
 
+        {fileName && (
+          <div className={styles.fileInfo}>
+            <Music size={12} />
+            <span className={styles.fileName}>{fileName}</span>
+          </div>
+        )}
+
         <input
           ref={fileInputRef}
           type="file"
@@ -128,9 +138,10 @@ export const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onStop }) 
         <div className={styles.buttonRow}>
           <button
             type="button"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isPlaying}
+            onClick={onPlay}
+            disabled={!hasFile || isPlaying}
             className={styles.actionButton}
+            aria-label="再生"
           >
             <Play size={12} />
             再生
@@ -140,6 +151,7 @@ export const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onStop }) 
             onClick={onStop}
             disabled={!isPlaying}
             className={styles.actionButton}
+            aria-label="停止"
           >
             <Square size={12} />
             停止
