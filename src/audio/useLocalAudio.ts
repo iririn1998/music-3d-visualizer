@@ -22,6 +22,7 @@ export const useLocalAudio = () => {
   const setPlaybackState = useAudioStore((s) => s.setPlaybackState);
   const setFileLoaded = useAudioStore((s) => s.setFileLoaded);
   const setIsLoading = useAudioStore((s) => s.setIsLoading);
+  const setFileLoadComplete = useAudioStore((s) => s.setFileLoadComplete);
 
   const smoothedRef = useRef(useAudioStore.getState().smoothedAudioData);
 
@@ -72,18 +73,20 @@ export const useLocalAudio = () => {
 
       try {
         await analyzer.loadFile(file, sensitivity);
-      } finally {
+      } catch {
         if (token === loadTokenRef.current) {
           setIsLoading(false);
         }
+        return;
       }
 
       if (token !== loadTokenRef.current) return;
 
-      setFileLoaded(file.name);
-      setPlaybackState('idle');
+      // isLoading・hasFile・fileName・playbackState をアトミックに更新することで、
+      // setIsLoading(false) 後に play() が割り込んで 'playing' を 'idle' で上書きする競合を防ぐ。
+      setFileLoadComplete(file.name);
     },
-    [sensitivity, setPlaybackState, setFileLoaded, setIsLoading, stopLoop, getAnalyzer],
+    [sensitivity, setFileLoaded, setIsLoading, setFileLoadComplete, stopLoop, getAnalyzer],
   );
 
   /** キャッシュ済みバッファを再生する */
