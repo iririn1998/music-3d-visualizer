@@ -39,7 +39,6 @@ type PlayerControlsProps = {
 export const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onPlay, onStop }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const playbackState = useAudioStore((s) => s.playbackState);
-  const hasFile = useAudioStore((s) => s.hasFile);
   const fileName = useAudioStore((s) => s.fileName);
   const pushError = useErrorStore((s) => s.pushError);
 
@@ -95,6 +94,7 @@ export const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onPlay, on
   }, []);
 
   const isPlaying = playbackState === 'playing';
+  const hasFile = fileName !== null;
 
   return (
     <div className={styles.root}>
@@ -119,7 +119,7 @@ export const PlayerControls: FC<PlayerControlsProps> = ({ onLoadFile, onPlay, on
           <span className={styles.dropHint}>MP3, WAV, OGG, FLAC, AAC, M4A, WebM</span>
         </div>
 
-        {hasFile && fileName && (
+        {fileName && (
           <div className={styles.fileInfo}>
             <Music size={12} />
             <span className={styles.fileName}>{fileName}</span>

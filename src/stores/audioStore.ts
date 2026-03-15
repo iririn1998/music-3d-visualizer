@@ -12,7 +12,6 @@ interface AudioStore {
   playbackState: PlaybackState;
   mode: VisualizerMode;
   sensitivity: number;
-  hasFile: boolean;
   fileName: string | null;
   isLoading: boolean;
 
@@ -23,7 +22,7 @@ interface AudioStore {
   setSensitivity: (sensitivity: number) => void;
   setFileLoaded: (fileName: string | null) => void;
   setIsLoading: (loading: boolean) => void;
-  /** ファイル読み込み完了時に isLoading・hasFile・fileName・playbackState を一括更新する */
+  /** ファイル読み込み完了時に isLoading・fileName・playbackState を一括更新する */
   setFileLoadComplete: (fileName: string) => void;
 }
 
@@ -33,7 +32,6 @@ export const useAudioStore = create<AudioStore>((set) => ({
   playbackState: 'idle',
   mode: 'core',
   sensitivity: 1.0,
-  hasFile: false,
   fileName: null,
   isLoading: false,
 
@@ -42,8 +40,7 @@ export const useAudioStore = create<AudioStore>((set) => ({
   setPlaybackState: (state) => set({ playbackState: state }),
   setMode: (mode) => set({ mode }),
   setSensitivity: (sensitivity) => set({ sensitivity }),
-  setFileLoaded: (fileName) => set({ hasFile: fileName !== null, fileName }),
+  setFileLoaded: (fileName) => set({ fileName }),
   setIsLoading: (loading) => set({ isLoading: loading }),
-  setFileLoadComplete: (fileName) =>
-    set({ isLoading: false, hasFile: true, fileName, playbackState: 'idle' }),
+  setFileLoadComplete: (fileName) => set({ isLoading: false, fileName, playbackState: 'idle' }),
 }));

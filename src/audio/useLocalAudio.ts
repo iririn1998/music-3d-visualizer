@@ -82,7 +82,7 @@ export const useLocalAudio = () => {
 
       if (token !== loadTokenRef.current) return;
 
-      // isLoading・hasFile・fileName・playbackState をアトミックに更新することで、
+      // isLoading・fileName・playbackState をアトミックに更新することで、
       // setIsLoading(false) 後に play() が割り込んで 'playing' を 'idle' で上書きする競合を防ぐ。
       setFileLoadComplete(file.name);
     },
