@@ -14,6 +14,7 @@ interface AudioStore {
   sensitivity: number;
   hasFile: boolean;
   fileName: string | null;
+  isLoading: boolean;
 
   setAudioData: (data: AudioData) => void;
   setSmoothedAudioData: (data: AudioData) => void;
@@ -21,6 +22,7 @@ interface AudioStore {
   setMode: (mode: VisualizerMode) => void;
   setSensitivity: (sensitivity: number) => void;
   setFileLoaded: (fileName: string | null) => void;
+  setIsLoading: (loading: boolean) => void;
 }
 
 export const useAudioStore = create<AudioStore>((set) => ({
@@ -31,6 +33,7 @@ export const useAudioStore = create<AudioStore>((set) => ({
   sensitivity: 1.0,
   hasFile: false,
   fileName: null,
+  isLoading: false,
 
   setAudioData: (data) => set({ audioData: data }),
   setSmoothedAudioData: (data) => set({ smoothedAudioData: data }),
@@ -38,4 +41,5 @@ export const useAudioStore = create<AudioStore>((set) => ({
   setMode: (mode) => set({ mode }),
   setSensitivity: (sensitivity) => set({ sensitivity }),
   setFileLoaded: (fileName) => set({ hasFile: fileName !== null, fileName }),
+  setIsLoading: (loading) => set({ isLoading: loading }),
 }));

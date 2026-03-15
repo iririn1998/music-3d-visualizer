@@ -21,6 +21,7 @@ export const useLocalAudio = () => {
   const setSmoothedAudioData = useAudioStore((s) => s.setSmoothedAudioData);
   const setPlaybackState = useAudioStore((s) => s.setPlaybackState);
   const setFileLoaded = useAudioStore((s) => s.setFileLoaded);
+  const setIsLoading = useAudioStore((s) => s.setIsLoading);
 
   const smoothedRef = useRef(useAudioStore.getState().smoothedAudioData);
 
@@ -66,20 +67,30 @@ export const useLocalAudio = () => {
       const analyzer = getAnalyzer();
 
       stopLoop();
-      await analyzer.loadFile(file, sensitivity);
+      setFileLoaded(null);
+      setIsLoading(true);
+
+      try {
+        await analyzer.loadFile(file, sensitivity);
+      } finally {
+        if (token === loadTokenRef.current) {
+          setIsLoading(false);
+        }
+      }
 
       if (token !== loadTokenRef.current) return;
 
       setFileLoaded(file.name);
       setPlaybackState('idle');
     },
-    [sensitivity, setPlaybackState, setFileLoaded, stopLoop, getAnalyzer],
+    [sensitivity, setPlaybackState, setFileLoaded, setIsLoading, stopLoop, getAnalyzer],
   );
 
   /** キャッシュ済みバッファを再生する */
   const play = useCallback(() => {
+    const { isLoading } = useAudioStore.getState();
     const analyzer = getAnalyzer();
-    if (!analyzer.hasBuffer) return;
+    if (isLoading || !analyzer.hasBuffer) return;
 
     analyzer.setOnEnded(() => {
       stopLoop();
