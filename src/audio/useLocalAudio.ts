@@ -94,7 +94,7 @@ export const useLocalAudio = () => {
 
     analyzer.setOnEnded(() => {
       stopLoop();
-      setPlaybackState('paused');
+      setPlaybackState('ended');
     });
 
     analyzer.play(sensitivity);
